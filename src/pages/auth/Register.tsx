@@ -75,7 +75,7 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
       {/* Register Card */}
-      <div className="bg-white rounded-2xl shadow-xl p-8 border border-background-secondary">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
         <div className="w-full max-w-md">
           {/* Logo and Header */}
             <img
@@ -96,14 +96,14 @@ const Register = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="John"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                  errors.name ? "border-danger" : "border-gray-300"
-                }`}
-                disabled={isLoading !== null}
-              />
-              {errors.name && (
-                <p className="text-xs text-danger mt-1">{errors.name}</p>
-              )}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                   errors.name ? "border-red-500" : "border-gray-300"
+                 }`}
+                 disabled={isLoading !== null}
+               />
+               {errors.name && (
+                 <p className="text-xs text-red-600 mt-1">{errors.name}</p>
+               )}
             </div>
 
             {/* Email Input */}
@@ -117,14 +117,14 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="john@example.com"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                  errors.email ? "border-danger" : "border-gray-300"
-                }`}
-                disabled={isLoading !== null}
-              />
-              {errors.email && (
-                <p className="text-xs text-danger mt-1">{errors.email}</p>
-              )}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                   errors.email ? "border-red-500" : "border-gray-300"
+                 }`}
+                 disabled={isLoading !== null}
+               />
+               {errors.email && (
+                 <p className="text-xs text-red-600 mt-1">{errors.email}</p>
+               )}
             </div>
 
             {/* Password Input */}
@@ -138,15 +138,15 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="••••••••"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                  errors.password ? "border-danger" : "border-gray-300"
-                }`}
-                disabled={isLoading !== null}
-              />
-              {errors.password && (
-                <p className="text-xs text-danger mt-1">{errors.password}</p>
-              )}
-              <p className="text-xs text-secondary mt-1">
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                   errors.password ? "border-red-500" : "border-gray-300"
+                 }`}
+                 disabled={isLoading !== null}
+               />
+               {errors.password && (
+                 <p className="text-xs text-red-600 mt-1">{errors.password}</p>
+               )}
+               <p className="text-xs text-gray-500 mt-1">
                 At least 8 characters
               </p>
             </div>
@@ -172,30 +172,30 @@ const Register = () => {
               />
               <label htmlFor="terms" className="text-sm text-gray-700">
                 I agree to the{" "}
-                <a
-                  href="#"
-                  className="text-primary hover:underline font-medium"
-                >
-                  Terms and Conditions
-                </a>{" "}
-                and{" "}
-                <a
-                  href="#"
-                  className="text-primary hover:underline font-medium"
-                >
-                  Privacy Policy
-                </a>
+                 <a
+                   href="#"
+                   className="text-blue-600 hover:underline font-medium"
+                 >
+                   Terms and Conditions
+                 </a>{" "}
+                 and{" "}
+                 <a
+                   href="#"
+                   className="text-blue-600 hover:underline font-medium"
+                 >
+                   Privacy Policy
+                 </a>
               </label>
             </div>
             {errors.terms && (
-              <p className="text-xs text-danger mt-1">{errors.terms}</p>
+               <p className="text-xs text-red-600 mt-1">{errors.terms}</p>
             )}
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading !== null}
-              className="w-full px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-[#003a8f] transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-6"
+              className="w-full px-4 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-6"
             >
               {isLoading === "email" ? "Creating Account..." : "Create Account"}
             </button>
@@ -213,9 +213,9 @@ const Register = () => {
             <button
               onClick={handleGoogleAuth}
               disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-primary/20 hover:border-primary/50 hover:bg-background/50 rounded-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <FaGoogle className="text-lg text-primary" />
+              <FaGoogle className="text-lg text-blue-600" />
               <span className="font-medium text-gray-900">
                 {isLoading === "google"
                   ? "Signing up..."
@@ -226,12 +226,12 @@ const Register = () => {
         </div>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-secondary">
+        <div className="mt-6 text-center text-sm text-gray-500">
           <p>
             Already have an account?{" "}
             <button
               onClick={() => navigate("/login")}
-              className="font-medium text-primary hover:underline"
+              className="font-medium text-blue-600 hover:underline"
             >
               Sign in here
             </button>

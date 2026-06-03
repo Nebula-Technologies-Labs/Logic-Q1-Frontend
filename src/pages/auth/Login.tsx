@@ -43,7 +43,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-background-secondary">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
           {/* Logo and Header */}
           <img
             src="/assets/logo.png"
@@ -65,7 +65,7 @@ const Login = () => {
                   setEmailError("");
                 }}
                 placeholder="name@example.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 disabled={isLoading !== null}
               />
             </div>
@@ -76,7 +76,7 @@ const Login = () => {
                 <label className="block text-sm font-medium text-gray-900">
                   Password
                 </label>
-                <a href="#" className="text-xs text-primary hover:underline">
+                <a href="#" className="text-xs text-blue-600 hover:underline">
                   Forgot password?
                 </a>
               </div>
@@ -88,15 +88,15 @@ const Login = () => {
                   setEmailError("");
                 }}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 disabled={isLoading !== null}
               />
             </div>
 
             {/* Error Message */}
             {emailError && (
-              <div className="px-4 py-3 bg-danger/10 border border-danger/30 rounded-lg">
-                <p className="text-sm text-danger">{emailError}</p>
+              <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">{emailError}</p>
               </div>
             )}
 
@@ -104,7 +104,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading !== null}
-              className="w-full px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-[#003a8f] transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full px-4 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading === "email" ? "Signing in..." : "Sign in with Email"}
             </button>
@@ -123,9 +123,9 @@ const Login = () => {
             <button
               onClick={handleGoogleAuth}
               disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-primary/20 hover:border-primary/50 hover:bg-background/50 rounded-lg transition-all duration-300 group disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg transition-all duration-300 group disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <FaGoogle className="text-lg text-primary" />
+              <FaGoogle className="text-lg text-blue-600" />
               <span className="font-medium text-gray-900">
                 {isLoading === "google"
                   ? "Signing in..."
@@ -136,12 +136,12 @@ const Login = () => {
         </div>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-secondary">
+        <div className="mt-6 text-center text-sm text-gray-500">
           <p>
             Don't have an account?{" "}
             <button
               onClick={() => navigate("/register")}
-              className="font-medium text-primary hover:underline"
+              className="font-medium text-blue-600 hover:underline"
             >
               Sign up here
             </button>
