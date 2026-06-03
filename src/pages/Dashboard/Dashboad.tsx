@@ -44,20 +44,7 @@ const recentActivity = [
   { user: "Robert Williams", action: "added note", time: "5h ago" },
 ];
 
-const defaultPersons: Person[] = [
-  { id: "d1", firstName: "John", lastName: "Smith", organization: "Acme Corp", phones: [{ id: "ph1", number: "(555) 123-4567", type: "work" }], emails: [{ id: "em1", address: "john.smith@acme.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
-  { id: "d2", firstName: "Sarah", lastName: "Johnson", organization: "Globex Inc", phones: [{ id: "ph2", number: "(555) 987-6543", type: "work" }], emails: [{ id: "em2", address: "sarah.j@globex.com", type: "work" }], label: "Partner", owner: "John D.", visibleTo: "team", status: "New" },
-  { id: "d3", firstName: "Michael", lastName: "Brown", organization: "Initech", phones: [{ id: "ph3", number: "(555) 456-7890", type: "work" }], emails: [{ id: "em3", address: "mbrown@initech.co", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
-  { id: "d4", firstName: "Emily", lastName: "Davis", organization: "Hooli", phones: [{ id: "ph4", number: "(555) 234-5678", type: "work" }], emails: [{ id: "em4", address: "emily.d@hooli.com", type: "work" }], label: "VIP", owner: "Mike R.", visibleTo: "everyone", status: "Pending" },
-  { id: "d5", firstName: "James", lastName: "Wilson", organization: "Stark Industries", phones: [{ id: "ph5", number: "(555) 876-5432", type: "work" }], emails: [{ id: "em5", address: "jwilson@stark.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
-  { id: "d6", firstName: "Lisa", lastName: "Anderson", organization: "Wayne Enterprises", phones: [{ id: "ph6", number: "(555) 345-6789", type: "work" }], emails: [{ id: "em6", address: "l.anderson@wayne.com", type: "work" }], label: "Supplier", owner: "John D.", visibleTo: "team", status: "Inactive" },
-  { id: "d7", firstName: "David", lastName: "Taylor", organization: "Umbrella Corp", phones: [{ id: "ph7", number: "(555) 654-3210", type: "work" }], emails: [{ id: "em7", address: "dtaylor@umbrella.com", type: "work" }], label: "None", owner: "", visibleTo: "everyone", status: "New" },
-  { id: "d8", firstName: "Robert", lastName: "Williams", organization: "Cyberdyne", phones: [{ id: "ph8", number: "(555) 111-2222", type: "work" }], emails: [{ id: "em8", address: "rwilliams@cyberdyne.com", type: "work" }], label: "Internal", owner: "Sarah M.", visibleTo: "team", status: "Active" },
-  { id: "d9", firstName: "Jennifer", lastName: "Lee", organization: "Massive Dynamic", phones: [{ id: "ph9", number: "(555) 333-4444", type: "work" }], emails: [{ id: "em9", address: "jlee@massive.com", type: "work" }], label: "VIP", owner: "Mike R.", visibleTo: "everyone", status: "Pending" },
-  { id: "d10", firstName: "Thomas", lastName: "Clark", organization: "LexCorp", phones: [{ id: "ph10", number: "(555) 555-6666", type: "work" }], emails: [{ id: "em10", address: "tclark@lexcorp.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
-  { id: "d11", firstName: "Maria", lastName: "Garcia", organization: "Oscorp", phones: [{ id: "ph11", number: "(555) 777-8888", type: "work" }], emails: [{ id: "em11", address: "mgarcia@oscorp.com", type: "work" }], label: "Partner", owner: "John D.", visibleTo: "everyone", status: "Active" },
-  { id: "d12", firstName: "Kevin", lastName: "Brown", organization: "Wayne Corp", phones: [{ id: "ph12", number: "(555) 999-0000", type: "work" }], emails: [{ id: "em12", address: "kbrown@wayne.com", type: "work" }], label: "None", owner: "", visibleTo: "everyone", status: "Pending" },
-];
+const defaultPersons: Person[] = [];
 
 const itemsPerPage = 10;
 

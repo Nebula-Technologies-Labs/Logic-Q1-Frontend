@@ -31,15 +31,7 @@ const leadStats = [
   { label: "Win Rate", value: "41%", trend: "down", change: "-3%" },
 ];
 
-const defaultData: LeadItem[] = [
-  { id: "l1", name: "Carol White", organization: "Oscorp", phone: "(555) 555-6666", email: "carol@oscorp.com", status: "New" },
-  { id: "l2", name: "Dan Green", organization: "LexCorp", phone: "(555) 777-8888", email: "dan@lexcorp.com", status: "Pending" },
-  { id: "l3", name: "Eve Black", organization: "SPECTRE", phone: "(555) 999-0000", email: "eve@spectre.com", status: "Active" },
-  { id: "l4", name: "Frank Castle", organization: "S.H.I.E.L.D.", phone: "(555) 444-1111", email: "frank@shield.com", status: "Closed" },
-  { id: "l5", name: "Grace Hopper", organization: "Naval Intelligence", phone: "(555) 222-3333", email: "grace@navy.mil", status: "New" },
-  { id: "l6", name: "Hank Pym", organization: "Pym Technologies", phone: "(555) 666-7777", email: "hank@pym.com", status: "Pending" },
-  { id: "l7", name: "Iris West", organization: "Central City", phone: "(555) 888-9999", email: "iwest@central.com", status: "Active" },
-];
+const defaultData: LeadItem[] = [];
 
 const Leads = () => {
   const [searchQuery, setSearchQuery] = useState("");

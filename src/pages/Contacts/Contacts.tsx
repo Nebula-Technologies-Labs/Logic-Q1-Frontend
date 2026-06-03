@@ -43,36 +43,11 @@ type Section = "persons" | "organisations" | "timeline";
 
 const itemsPerPage = 5;
 
-const defaultPersons: Person[] = [
-  { id: "p1", firstName: "Alice", lastName: "Cooper", organization: "Cyberdyne", phones: [{ id: "ph1", number: "(555) 111-2222", type: "work" }], emails: [{ id: "em1", address: "alice@cyberdyne.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
-  { id: "p2", firstName: "Bob", lastName: "Marley", organization: "Massive Dynamic", phones: [{ id: "ph2", number: "(555) 333-4444", type: "work" }, { id: "ph3", number: "(555) 333-4445", type: "personal" }], emails: [{ id: "em2", address: "bob@massive.com", type: "work" }, { id: "em3", address: "bob@gmail.com", type: "personal" }], label: "Partner", owner: "John D.", visibleTo: "team", status: "Pending" },
-  { id: "p3", firstName: "Charlie", lastName: "Watts", organization: "Wayne Corp", phones: [{ id: "ph4", number: "(555) 555-6666", type: "work" }], emails: [{ id: "em4", address: "charlie@wayne.com", type: "work" }], label: "VIP", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
-  { id: "p4", firstName: "Diana", lastName: "Prince", organization: "Themyscira", phones: [{ id: "ph5", number: "(555) 777-8888", type: "personal" }], emails: [{ id: "em5", address: "diana@themyscira.com", type: "work" }], label: "Client", owner: "Mike R.", visibleTo: "everyone", status: "Inactive" },
-  { id: "p5", firstName: "Edward", lastName: "Nygma", organization: "Gotham Labs", phones: [{ id: "ph6", number: "(555) 999-0000", type: "work" }], emails: [{ id: "em6", address: "edward@gotham.com", type: "work" }, { id: "em7", address: "eddy@personal.com", type: "personal" }], label: "Supplier", owner: "John D.", visibleTo: "only_me", status: "New" },
-  { id: "p6", firstName: "Fiona", lastName: "Glenanne", organization: "Burn Notice", phones: [{ id: "ph8", number: "(555) 444-1111", type: "work" }], emails: [{ id: "em8", address: "fiona@burn.com", type: "work" }], label: "Internal", owner: "Sarah M.", visibleTo: "team", status: "Active" },
-  { id: "p7", firstName: "George", lastName: "Kaplan", organization: "ION Inc", phones: [{ id: "ph9", number: "(555) 222-3333", type: "personal" }], emails: [{ id: "em9", address: "gkaplan@ion.com", type: "work" }], label: "None", owner: "", visibleTo: "everyone", status: "New" },
-  { id: "p8", firstName: "Helen", lastName: "Parr", organization: "Incredico", phones: [{ id: "ph10", number: "(555) 666-7777", type: "work" }, { id: "ph11", number: "(555) 666-7778", type: "personal" }], emails: [{ id: "em10", address: "hparr@incredico.com", type: "work" }], label: "Client", owner: "Mike R.", visibleTo: "everyone", status: "Active" },
-];
+const defaultPersons: Person[] = [];
 
-const defaultOrganisations: Organisation[] = [
-  { id: "o1", name: "Cyberdyne", industry: "Technology", phone: "(555) 111-0000", email: "info@cyberdyne.com", website: "", address: "", contacts: 3 },
-  { id: "o2", name: "Massive Dynamic", industry: "Research", phone: "(555) 333-0000", email: "contact@massive.com", website: "", address: "", contacts: 5 },
-  { id: "o3", name: "Wayne Corp", industry: "Manufacturing", phone: "(555) 555-0000", email: "hello@wayne.com", website: "", address: "", contacts: 2 },
-  { id: "o4", name: "Gotham Labs", industry: "Pharmaceuticals", phone: "(555) 999-0000", email: "info@gothamlabs.com", website: "", address: "", contacts: 1 },
-  { id: "o5", name: "Incredico", industry: "Insurance", phone: "(555) 666-0000", email: "support@incredico.com", website: "", address: "", contacts: 4 },
-  { id: "o6", name: "Stark Industries", industry: "Defense", phone: "(555) 777-0000", email: "contact@stark.com", website: "", address: "", contacts: 7 },
-];
+const defaultOrganisations: Organisation[] = [];
 
-const defaultTimeline: TimelineEvent[] = [
-  { id: "t1", personName: "Alice Cooper", action: "Added", detail: "Added as new contact", timestamp: "2 hours ago" },
-  { id: "t2", personName: "Bob Marley", action: "Updated", detail: "Phone number updated", timestamp: "5 hours ago" },
-  { id: "t3", personName: "Charlie Watts", action: "Label changed", detail: "Label set to VIP", timestamp: "1 day ago" },
-  { id: "t4", personName: "Diana Prince", action: "Note added", detail: "Follow up next quarter", timestamp: "2 days ago" },
-  { id: "t5", personName: "Edward Nygma", action: "Email sent", detail: "Proposal sent via email", timestamp: "3 days ago" },
-  { id: "t6", personName: "Fiona Glenanne", action: "Added", detail: "Added by Sarah M.", timestamp: "4 days ago" },
-  { id: "t7", personName: "Helen Parr", action: "Meeting scheduled", detail: "Quarterly review - Q3", timestamp: "5 days ago" },
-  { id: "t8", personName: "George Kaplan", action: "Updated", detail: "Organization changed to ION Inc", timestamp: "1 week ago" },
-];
+const defaultTimeline: TimelineEvent[] = [];
 
 const columnSet: Record<Section, { key: string; label: string }[]> = {
   persons: [
