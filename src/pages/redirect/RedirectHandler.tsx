@@ -10,7 +10,7 @@ const RedirectHandler = () => {
     const token = params.get("token");
     if (token) {
       localStorage.setItem("token", token);
-      navigate("/dashboard");
+      navigate("/");
     }
   }, [location.search, navigate]);
 
