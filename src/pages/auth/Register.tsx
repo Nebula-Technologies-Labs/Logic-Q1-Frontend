@@ -194,7 +194,7 @@ const Register = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading !== null}
+              disabled={isLoading !== null || !agreeTerms}
               className="w-full px-4 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-6"
             >
               {isLoading === "email" ? "Creating Account..." : "Create Account"}
