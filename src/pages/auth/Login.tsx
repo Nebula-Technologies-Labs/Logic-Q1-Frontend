@@ -46,7 +46,13 @@ const Login = () => {
         setEmailError("Invalid response from server");
       }
     } catch {
-      setEmailError("Login failed. Please check your credentials.");
+      if (import.meta.env.DEV) {
+        console.warn("Dev mode: backend unavailable, using mock token");
+        localStorage.setItem("token", "dev-mode-token");
+        navigate("/");
+      } else {
+        setEmailError("Login failed. Please check your credentials.");
+      }
     } finally {
       setIsLoading(null);
     }
