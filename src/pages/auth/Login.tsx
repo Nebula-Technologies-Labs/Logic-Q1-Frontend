@@ -1,6 +1,7 @@
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../../api/axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Login = () => {
     window.location.href = "http://localhost:8080/api/auth/callback/google";
   };
 
-  const handleEmailLogin = (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setEmailError("");
 
@@ -34,9 +35,21 @@ const Login = () => {
     }
 
     setIsLoading("email");
-    // TODO: Connect to your email login endpoint
-    console.log("Email login attempt:", { email, password });
-    // window.location.href = "http://localhost:8080/api/auth/login";
+
+    try {
+      const res = await AxiosInstance.post("/api/auth/login", { email, password });
+      const token = res.data.token;
+      if (token) {
+        localStorage.setItem("token", token);
+        navigate("/");
+      } else {
+        setEmailError("Invalid response from server");
+      }
+    } catch {
+      setEmailError("Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(null);
+    }
   };
 
   return (

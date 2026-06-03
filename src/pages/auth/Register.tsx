@@ -1,6 +1,7 @@
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../../api/axios";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Register = () => {
     }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -67,9 +68,25 @@ const Register = () => {
     }
 
     setIsLoading("email");
-    // TODO: Connect to your registration endpoint
-    console.log("Registration attempt:", formData);
-    // window.location.href = "http://localhost:8080/api/auth/register";
+
+    try {
+      const res = await AxiosInstance.post("/api/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+      const token = res.data.token;
+      if (token) {
+        localStorage.setItem("token", token);
+        navigate("/");
+      } else {
+        setErrors({ email: "Account created but no token returned. Please log in." });
+      }
+    } catch {
+      setErrors({ email: "Registration failed. Please try again." });
+    } finally {
+      setIsLoading(null);
+    }
   };
 
   return (
