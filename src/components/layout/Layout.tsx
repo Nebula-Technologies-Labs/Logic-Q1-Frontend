@@ -3,11 +3,16 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
 interface LayoutProps {
-  title: string;
   children: React.ReactNode;
+  rightPanel?: React.ReactNode;
+  subHeader?: React.ReactNode;
+  footer?: React.ReactNode;
+  searchValue: string;
+  onSearch: (value: string) => void;
+  onAddNew: () => void;
 }
 
-const Layout = ({ title, children }: LayoutProps) => {
+const Layout = ({ children, rightPanel, subHeader, footer, searchValue, onSearch, onAddNew }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -15,12 +20,31 @@ const Layout = ({ title, children }: LayoutProps) => {
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex flex-col flex-1 min-w-0">
         <Navbar
-          title={title}
           onMenuClick={() => setSidebarOpen(true)}
+          onSearch={onSearch}
+          onAddNew={onAddNew}
+          searchValue={searchValue}
         />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          {children}
-        </main>
+        {subHeader && (
+          <div className="border-b border-gray-200 bg-white">
+            {subHeader}
+          </div>
+        )}
+        <div className="flex flex-1 overflow-hidden">
+          <main className="flex-1 overflow-y-auto">
+            {children}
+          </main>
+          {rightPanel && (
+            <aside className="hidden lg:block w-96 bg-gray-900 border-l border-gray-700 overflow-y-auto p-5">
+              {rightPanel}
+            </aside>
+          )}
+        </div>
+        {footer && (
+          <div className="bg-gray-900 border-t border-gray-700">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );
