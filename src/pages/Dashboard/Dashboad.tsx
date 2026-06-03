@@ -3,16 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { Users, Target, Mail, Activity } from "lucide-react";
 import Layout from "../../components/layout/Layout";
 import Table from "../../components/common/Table";
-import Modal from "../../components/common/Modal";
+import ContactFormModal from "../../components/common/ContactFormModal";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 import { useLocalStorage } from "../../utils/storage";
 
-interface DashItem extends Record<string, unknown> {
+interface Person {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   organization: string;
-  phone: string;
-  email: string;
+  phones: { id: string; number: string; type: "work" | "personal" }[];
+  emails: { id: string; address: string; type: "work" | "personal" }[];
+  label: string;
+  owner: string;
+  visibleTo: "everyone" | "only_me" | "team";
   status: string;
 }
 
@@ -40,19 +44,19 @@ const recentActivity = [
   { user: "Robert Williams", action: "added note", time: "5h ago" },
 ];
 
-const defaultData: DashItem[] = [
-  { id: "d1", name: "John Smith", organization: "Acme Corp", phone: "(555) 123-4567", email: "john.smith@acme.com", status: "Active" },
-  { id: "d2", name: "Sarah Johnson", organization: "Globex Inc", phone: "(555) 987-6543", email: "sarah.j@globex.com", status: "New" },
-  { id: "d3", name: "Michael Brown", organization: "Initech", phone: "(555) 456-7890", email: "mbrown@initech.co", status: "Active" },
-  { id: "d4", name: "Emily Davis", organization: "Hooli", phone: "(555) 234-5678", email: "emily.d@hooli.com", status: "Pending" },
-  { id: "d5", name: "James Wilson", organization: "Stark Industries", phone: "(555) 876-5432", email: "jwilson@stark.com", status: "Active" },
-  { id: "d6", name: "Lisa Anderson", organization: "Wayne Enterprises", phone: "(555) 345-6789", email: "l.anderson@wayne.com", status: "Inactive" },
-  { id: "d7", name: "David Taylor", organization: "Umbrella Corp", phone: "(555) 654-3210", email: "dtaylor@umbrella.com", status: "New" },
-  { id: "d8", name: "Robert Williams", organization: "Cyberdyne", phone: "(555) 111-2222", email: "rwilliams@cyberdyne.com", status: "Active" },
-  { id: "d9", name: "Jennifer Lee", organization: "Massive Dynamic", phone: "(555) 333-4444", email: "jlee@massive.com", status: "Pending" },
-  { id: "d10", name: "Thomas Clark", organization: "LexCorp", phone: "(555) 555-6666", email: "tclark@lexcorp.com", status: "Active" },
-  { id: "d11", name: "Maria Garcia", organization: "Oscorp", phone: "(555) 777-8888", email: "mgarcia@oscorp.com", status: "Active" },
-  { id: "d12", name: "Kevin Brown", organization: "Wayne Corp", phone: "(555) 999-0000", email: "kbrown@wayne.com", status: "Pending" },
+const defaultPersons: Person[] = [
+  { id: "d1", firstName: "John", lastName: "Smith", organization: "Acme Corp", phones: [{ id: "ph1", number: "(555) 123-4567", type: "work" }], emails: [{ id: "em1", address: "john.smith@acme.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
+  { id: "d2", firstName: "Sarah", lastName: "Johnson", organization: "Globex Inc", phones: [{ id: "ph2", number: "(555) 987-6543", type: "work" }], emails: [{ id: "em2", address: "sarah.j@globex.com", type: "work" }], label: "Partner", owner: "John D.", visibleTo: "team", status: "New" },
+  { id: "d3", firstName: "Michael", lastName: "Brown", organization: "Initech", phones: [{ id: "ph3", number: "(555) 456-7890", type: "work" }], emails: [{ id: "em3", address: "mbrown@initech.co", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
+  { id: "d4", firstName: "Emily", lastName: "Davis", organization: "Hooli", phones: [{ id: "ph4", number: "(555) 234-5678", type: "work" }], emails: [{ id: "em4", address: "emily.d@hooli.com", type: "work" }], label: "VIP", owner: "Mike R.", visibleTo: "everyone", status: "Pending" },
+  { id: "d5", firstName: "James", lastName: "Wilson", organization: "Stark Industries", phones: [{ id: "ph5", number: "(555) 876-5432", type: "work" }], emails: [{ id: "em5", address: "jwilson@stark.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
+  { id: "d6", firstName: "Lisa", lastName: "Anderson", organization: "Wayne Enterprises", phones: [{ id: "ph6", number: "(555) 345-6789", type: "work" }], emails: [{ id: "em6", address: "l.anderson@wayne.com", type: "work" }], label: "Supplier", owner: "John D.", visibleTo: "team", status: "Inactive" },
+  { id: "d7", firstName: "David", lastName: "Taylor", organization: "Umbrella Corp", phones: [{ id: "ph7", number: "(555) 654-3210", type: "work" }], emails: [{ id: "em7", address: "dtaylor@umbrella.com", type: "work" }], label: "None", owner: "", visibleTo: "everyone", status: "New" },
+  { id: "d8", firstName: "Robert", lastName: "Williams", organization: "Cyberdyne", phones: [{ id: "ph8", number: "(555) 111-2222", type: "work" }], emails: [{ id: "em8", address: "rwilliams@cyberdyne.com", type: "work" }], label: "Internal", owner: "Sarah M.", visibleTo: "team", status: "Active" },
+  { id: "d9", firstName: "Jennifer", lastName: "Lee", organization: "Massive Dynamic", phones: [{ id: "ph9", number: "(555) 333-4444", type: "work" }], emails: [{ id: "em9", address: "jlee@massive.com", type: "work" }], label: "VIP", owner: "Mike R.", visibleTo: "everyone", status: "Pending" },
+  { id: "d10", firstName: "Thomas", lastName: "Clark", organization: "LexCorp", phones: [{ id: "ph10", number: "(555) 555-6666", type: "work" }], emails: [{ id: "em10", address: "tclark@lexcorp.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
+  { id: "d11", firstName: "Maria", lastName: "Garcia", organization: "Oscorp", phones: [{ id: "ph11", number: "(555) 777-8888", type: "work" }], emails: [{ id: "em11", address: "mgarcia@oscorp.com", type: "work" }], label: "Partner", owner: "John D.", visibleTo: "everyone", status: "Active" },
+  { id: "d12", firstName: "Kevin", lastName: "Brown", organization: "Wayne Corp", phones: [{ id: "ph12", number: "(555) 999-0000", type: "work" }], emails: [{ id: "em12", address: "kbrown@wayne.com", type: "work" }], label: "None", owner: "", visibleTo: "everyone", status: "Pending" },
 ];
 
 const itemsPerPage = 10;
@@ -63,9 +67,9 @@ const Dashboad = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<DashItem | null>(null);
-  const [deletingItem, setDeletingItem] = useState<DashItem | null>(null);
-  const [allData, setAllData] = useLocalStorage<DashItem[]>("dash_contacts", defaultData);
+  const [editingItem, setEditingItem] = useState<Person | null>(null);
+  const [deletingItem, setDeletingItem] = useState<Person | null>(null);
+  const [allData, setAllData] = useLocalStorage<Person[]>("contacts_persons", defaultPersons);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -79,15 +83,24 @@ const Dashboad = () => {
     const q = searchQuery.toLowerCase();
     const matchesSearch =
       !q ||
-      row.name.toLowerCase().includes(q) ||
+      `${row.firstName} ${row.lastName}`.toLowerCase().includes(q) ||
       row.organization.toLowerCase().includes(q) ||
-      row.email.toLowerCase().includes(q);
+      row.emails[0]?.address.toLowerCase().includes(q);
     return matchesFilter && matchesSearch;
   });
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+  const dashboardRows = paginatedData.map((p) => ({
+    id: p.id,
+    name: `${p.firstName} ${p.lastName}`,
+    organization: p.organization,
+    phone: p.phones[0]?.number ?? "-",
+    email: p.emails[0]?.address ?? "-",
+    status: p.status,
+  }));
 
   const handleFilter = (filter: string) => {
     setActiveFilter(filter);
@@ -107,7 +120,7 @@ const Dashboad = () => {
     }
   };
 
-  const handleSave = (data: { name: string; organization: string; phone: string; email: string }) => {
+  const handleSave = (data: { firstName: string; lastName: string; organization: string; phones: { id: string; number: string; type: "work" | "personal" }[]; emails: { id: string; address: string; type: "work" | "personal" }[]; label: string; owner: string; visibleTo: "everyone" | "only_me" | "team"; status: string }) => {
     if (editingItem) {
       setAllData((prev) =>
         prev.map((d) =>
@@ -117,7 +130,7 @@ const Dashboad = () => {
     } else {
       setAllData((prev) => [
         ...prev,
-        { id: String(Date.now()), ...data, status: "New" },
+        { id: String(Date.now()), ...data },
       ]);
     }
   };
@@ -136,21 +149,21 @@ const Dashboad = () => {
 
   const subHeader = (
     <div className="flex items-center gap-2 px-5 py-2.5">
-      {["All", "Active", "Pending", "Inactive", "New"].map((f) => (
+      {["All", "Active", "Pending", "Inactive", "New", "Closed"].map((f) => (
         <button
           key={f}
           onClick={() => handleFilter(f)}
           className={`px-3 py-1.5 text-sm font-medium rounded-md ${
             activeFilter === f
               ? "bg-blue-600 text-white"
-              : "text-gray-600 hover:bg-gray-100"
+              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
           }`}
         >
           {f}
         </button>
       ))}
       <div className="ml-auto">
-        <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option>Last 30 days</option>
           <option>Last 7 days</option>
           <option>Today</option>
@@ -241,12 +254,12 @@ const Dashboad = () => {
       onAddNew={openAdd}
     >
       <div className="p-5">
-        <div className="bg-white border border-gray-200">
-          <Table columns={columns} data={paginatedData} onEdit={openEdit} onDelete={handleDelete} />
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <Table columns={columns} data={dashboardRows} onEdit={openEdit} onDelete={handleDelete} />
         </div>
       </div>
       {modalOpen && (
-        <Modal
+        <ContactFormModal
           initialData={editingItem ?? undefined}
           onClose={() => setModalOpen(false)}
           onSave={handleSave}
@@ -255,7 +268,7 @@ const Dashboad = () => {
       {deletingItem && (
         <ConfirmDialog
           title="Delete Contact"
-          message={`Are you sure you want to delete "${deletingItem.name}"?`}
+          message={`Are you sure you want to delete "${deletingItem.firstName} ${deletingItem.lastName}"?`}
           onConfirm={confirmDelete}
           onCancel={() => setDeletingItem(null)}
         />

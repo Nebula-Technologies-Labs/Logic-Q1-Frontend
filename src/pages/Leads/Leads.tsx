@@ -121,14 +121,14 @@ const Leads = () => {
           className={`px-3 py-1.5 text-sm font-medium rounded-md ${
             activeFilter === f
               ? "bg-blue-600 text-white"
-              : "text-gray-600 hover:bg-gray-100"
+              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
           }`}
         >
           {f}
         </button>
       ))}
       <div className="ml-auto flex items-center gap-2">
-        <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option>All Sources</option>
           <option>Website</option>
           <option>Referral</option>
@@ -206,7 +206,7 @@ const Leads = () => {
       onAddNew={openAdd}
     >
       <div className="p-5">
-        <div className="bg-white border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
           <Table columns={columns} data={paginatedData} onEdit={openEdit} onDelete={handleDelete} />
         </div>
       </div>

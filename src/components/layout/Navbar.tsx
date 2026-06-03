@@ -1,4 +1,5 @@
-import { Search, Plus, Menu } from "lucide-react";
+import { Search, Plus, Menu, Moon, Sun } from "lucide-react";
+import { useTheme } from "../../utils/ThemeContext";
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -8,6 +9,8 @@ interface NavbarProps {
 }
 
 const Navbar = ({ onMenuClick, onSearch, onAddNew, searchValue }: NavbarProps) => {
+  const { darkMode, toggleDarkMode } = useTheme();
+
   return (
     <header className="h-14 bg-gray-900 flex items-center justify-between px-4 lg:px-6">
       <div className="flex items-center gap-3">
@@ -36,6 +39,13 @@ const Navbar = ({ onMenuClick, onSearch, onAddNew, searchValue }: NavbarProps) =
             className="pl-9 pr-4 py-1.5 text-sm bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-44 lg:w-56"
           />
         </div>
+        <button
+          onClick={toggleDarkMode}
+          className="p-2 rounded-lg hover:bg-gray-700 text-gray-300"
+          title={darkMode ? "Light mode" : "Dark mode"}
+        >
+          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
         <button
           onClick={onAddNew}
           className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-1.5 rounded-md transition-colors"

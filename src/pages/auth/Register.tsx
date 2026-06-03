@@ -96,21 +96,17 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
-      {/* Register Card */}
-      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gray-50 dark:bg-gray-950">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
         <div className="w-full max-w-md">
-          {/* Logo and Header */}
             <img
               src="/assets/logo.png"
               alt="Logic Q1 Logo"
               className="h-24 w-auto mx-auto drop-shadow-lg mb-2"
             />
-          {/* Registration Form */}
           <form onSubmit={handleRegister} className="space-y-4">
-            {/* First Name Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
                 Name
               </label>
               <input
@@ -119,19 +115,18 @@ const Register = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="John"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                   errors.name ? "border-red-500" : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${
+                   errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                  }`}
                  disabled={isLoading !== null}
                />
                {errors.name && (
-                 <p className="text-xs text-red-600 mt-1">{errors.name}</p>
+                 <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.name}</p>
                )}
             </div>
 
-            {/* Email Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
                 Email Address
               </label>
               <input
@@ -140,19 +135,18 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="john@example.com"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                   errors.email ? "border-red-500" : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${
+                   errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                  }`}
                  disabled={isLoading !== null}
                />
                {errors.email && (
-                 <p className="text-xs text-red-600 mt-1">{errors.email}</p>
+                 <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.email}</p>
                )}
             </div>
 
-            {/* Password Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
                 Password
               </label>
               <input
@@ -161,20 +155,19 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="••••••••"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                   errors.password ? "border-red-500" : "border-gray-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${
+                   errors.password ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                  }`}
                  disabled={isLoading !== null}
                />
                {errors.password && (
-                 <p className="text-xs text-red-600 mt-1">{errors.password}</p>
+                 <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.password}</p>
                )}
-               <p className="text-xs text-gray-500 mt-1">
+               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 At least 8 characters
               </p>
             </div>
 
-            {/* Terms and Conditions Checkbox */}
             <div className="flex items-start gap-3 pt-2">
               <input
                 type="checkbox"
@@ -193,7 +186,7 @@ const Register = () => {
                 className="mt-1 cursor-pointer"
                 disabled={isLoading !== null}
               />
-              <label htmlFor="terms" className="text-sm text-gray-700">
+              <label htmlFor="terms" className="text-sm text-gray-700 dark:text-gray-300">
                 I agree to the{" "}
                  <a
                    href="#"
@@ -211,35 +204,31 @@ const Register = () => {
               </label>
             </div>
             {errors.terms && (
-               <p className="text-xs text-red-600 mt-1">{errors.terms}</p>
+               <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.terms}</p>
             )}
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading !== null || !agreeTerms}
-              className="w-full px-4 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-6"
+              className="w-full px-4 py-3 bg-black dark:bg-gray-700 text-white font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-6"
             >
               {isLoading === "email" ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
-          {/* Divider */}
           <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200"></div>
-            <span className="text-xs font-medium text-gray-500">OR</span>
-            <div className="flex-1 h-px bg-gray-200"></div>
+            <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+            <span className="text-xs font-medium text-gray-500 dark:text-gray-400">OR</span>
+            <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
           </div>
-          {/* Social Registration Buttons */}
           <div className="space-y-2 mb-6">
-            {/* Google Sign Up */}
             <button
               onClick={handleGoogleAuth}
               disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 rounded-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <FaGoogle className="text-lg text-blue-600" />
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-gray-900 dark:text-gray-100">
                 {isLoading === "google"
                   ? "Signing up..."
                   : "Sign up with Google"}
@@ -248,8 +237,7 @@ const Register = () => {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
           <p>
             Already have an account?{" "}
             <button

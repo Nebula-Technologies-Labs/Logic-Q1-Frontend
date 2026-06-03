@@ -16,7 +16,7 @@ const Layout = ({ children, rightPanel, subHeader, footer, searchValue, onSearch
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-950">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex flex-col flex-1 min-w-0">
         <Navbar
@@ -26,7 +26,7 @@ const Layout = ({ children, rightPanel, subHeader, footer, searchValue, onSearch
           searchValue={searchValue}
         />
         {subHeader && (
-          <div className="border-b border-gray-200 bg-white">
+          <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
             {subHeader}
           </div>
         )}

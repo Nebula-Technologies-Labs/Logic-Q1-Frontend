@@ -17,6 +17,7 @@ interface Person {
   label: string;
   owner: string;
   visibleTo: "everyone" | "only_me" | "team";
+  status: string;
 }
 
 interface Organisation {
@@ -43,14 +44,14 @@ type Section = "persons" | "organisations" | "timeline";
 const itemsPerPage = 5;
 
 const defaultPersons: Person[] = [
-  { id: "p1", firstName: "Alice", lastName: "Cooper", organization: "Cyberdyne", phones: [{ id: "ph1", number: "(555) 111-2222", type: "work" }], emails: [{ id: "em1", address: "alice@cyberdyne.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone" },
-  { id: "p2", firstName: "Bob", lastName: "Marley", organization: "Massive Dynamic", phones: [{ id: "ph2", number: "(555) 333-4444", type: "work" }, { id: "ph3", number: "(555) 333-4445", type: "personal" }], emails: [{ id: "em2", address: "bob@massive.com", type: "work" }, { id: "em3", address: "bob@gmail.com", type: "personal" }], label: "Partner", owner: "John D.", visibleTo: "team" },
-  { id: "p3", firstName: "Charlie", lastName: "Watts", organization: "Wayne Corp", phones: [{ id: "ph4", number: "(555) 555-6666", type: "work" }], emails: [{ id: "em4", address: "charlie@wayne.com", type: "work" }], label: "VIP", owner: "Sarah M.", visibleTo: "everyone" },
-  { id: "p4", firstName: "Diana", lastName: "Prince", organization: "Themyscira", phones: [{ id: "ph5", number: "(555) 777-8888", type: "personal" }], emails: [{ id: "em5", address: "diana@themyscira.com", type: "work" }], label: "Client", owner: "Mike R.", visibleTo: "everyone" },
-  { id: "p5", firstName: "Edward", lastName: "Nygma", organization: "Gotham Labs", phones: [{ id: "ph6", number: "(555) 999-0000", type: "work" }], emails: [{ id: "em6", address: "edward@gotham.com", type: "work" }, { id: "em7", address: "eddy@personal.com", type: "personal" }], label: "Supplier", owner: "John D.", visibleTo: "only_me" },
-  { id: "p6", firstName: "Fiona", lastName: "Glenanne", organization: "Burn Notice", phones: [{ id: "ph8", number: "(555) 444-1111", type: "work" }], emails: [{ id: "em8", address: "fiona@burn.com", type: "work" }], label: "Internal", owner: "Sarah M.", visibleTo: "team" },
-  { id: "p7", firstName: "George", lastName: "Kaplan", organization: "ION Inc", phones: [{ id: "ph9", number: "(555) 222-3333", type: "personal" }], emails: [{ id: "em9", address: "gkaplan@ion.com", type: "work" }], label: "None", owner: "", visibleTo: "everyone" },
-  { id: "p8", firstName: "Helen", lastName: "Parr", organization: "Incredico", phones: [{ id: "ph10", number: "(555) 666-7777", type: "work" }, { id: "ph11", number: "(555) 666-7778", type: "personal" }], emails: [{ id: "em10", address: "hparr@incredico.com", type: "work" }], label: "Client", owner: "Mike R.", visibleTo: "everyone" },
+  { id: "p1", firstName: "Alice", lastName: "Cooper", organization: "Cyberdyne", phones: [{ id: "ph1", number: "(555) 111-2222", type: "work" }], emails: [{ id: "em1", address: "alice@cyberdyne.com", type: "work" }], label: "Client", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
+  { id: "p2", firstName: "Bob", lastName: "Marley", organization: "Massive Dynamic", phones: [{ id: "ph2", number: "(555) 333-4444", type: "work" }, { id: "ph3", number: "(555) 333-4445", type: "personal" }], emails: [{ id: "em2", address: "bob@massive.com", type: "work" }, { id: "em3", address: "bob@gmail.com", type: "personal" }], label: "Partner", owner: "John D.", visibleTo: "team", status: "Pending" },
+  { id: "p3", firstName: "Charlie", lastName: "Watts", organization: "Wayne Corp", phones: [{ id: "ph4", number: "(555) 555-6666", type: "work" }], emails: [{ id: "em4", address: "charlie@wayne.com", type: "work" }], label: "VIP", owner: "Sarah M.", visibleTo: "everyone", status: "Active" },
+  { id: "p4", firstName: "Diana", lastName: "Prince", organization: "Themyscira", phones: [{ id: "ph5", number: "(555) 777-8888", type: "personal" }], emails: [{ id: "em5", address: "diana@themyscira.com", type: "work" }], label: "Client", owner: "Mike R.", visibleTo: "everyone", status: "Inactive" },
+  { id: "p5", firstName: "Edward", lastName: "Nygma", organization: "Gotham Labs", phones: [{ id: "ph6", number: "(555) 999-0000", type: "work" }], emails: [{ id: "em6", address: "edward@gotham.com", type: "work" }, { id: "em7", address: "eddy@personal.com", type: "personal" }], label: "Supplier", owner: "John D.", visibleTo: "only_me", status: "New" },
+  { id: "p6", firstName: "Fiona", lastName: "Glenanne", organization: "Burn Notice", phones: [{ id: "ph8", number: "(555) 444-1111", type: "work" }], emails: [{ id: "em8", address: "fiona@burn.com", type: "work" }], label: "Internal", owner: "Sarah M.", visibleTo: "team", status: "Active" },
+  { id: "p7", firstName: "George", lastName: "Kaplan", organization: "ION Inc", phones: [{ id: "ph9", number: "(555) 222-3333", type: "personal" }], emails: [{ id: "em9", address: "gkaplan@ion.com", type: "work" }], label: "None", owner: "", visibleTo: "everyone", status: "New" },
+  { id: "p8", firstName: "Helen", lastName: "Parr", organization: "Incredico", phones: [{ id: "ph10", number: "(555) 666-7777", type: "work" }, { id: "ph11", number: "(555) 666-7778", type: "personal" }], emails: [{ id: "em10", address: "hparr@incredico.com", type: "work" }], label: "Client", owner: "Mike R.", visibleTo: "everyone", status: "Active" },
 ];
 
 const defaultOrganisations: Organisation[] = [
@@ -79,6 +80,7 @@ const columnSet: Record<Section, { key: string; label: string }[]> = {
     { key: "organization", label: "Organization" },
     { key: "phone", label: "Phone" },
     { key: "email", label: "Email" },
+    { key: "status", label: "Status" },
     { key: "label", label: "Label" },
     { key: "owner", label: "Owner" },
   ],
@@ -149,7 +151,7 @@ const Contacts = () => {
     );
   };
 
-  const filteredPersons = filterData(persons, ["firstName", "lastName", "organization", "label", "owner"]);
+  const filteredPersons = filterData(persons, ["firstName", "lastName", "organization", "label", "owner", "status"]);
   const filteredOrganisations = filterData(organisations, ["name", "industry"]);
 
   const totalPages = Math.ceil(
@@ -183,7 +185,7 @@ const Contacts = () => {
       setPersons((prev) =>
         prev.map((p) =>
           p.id === editingPerson.id
-            ? { ...p, firstName: data.firstName, lastName: data.lastName, organization: data.organization, phones: data.phones, emails: data.emails, label: data.label, owner: data.owner, visibleTo: data.visibleTo }
+            ? { ...p, firstName: data.firstName, lastName: data.lastName, organization: data.organization, phones: data.phones, emails: data.emails, label: data.label, owner: data.owner, visibleTo: data.visibleTo, status: data.status }
             : p
         )
       );
@@ -199,6 +201,7 @@ const Contacts = () => {
         label: data.label,
         owner: data.owner,
         visibleTo: data.visibleTo,
+        status: data.status,
       };
       setPersons((prev) => [...prev, newPerson]);
       addTimelineEntry(timeline, setTimeline, `${data.firstName} ${data.lastName}`, "Added", "Added as new contact");
@@ -270,6 +273,7 @@ const Contacts = () => {
     organization: p.organization,
     phone: p.phones[0]?.number ?? "-",
     email: p.emails[0]?.address ?? "-",
+    status: p.status,
     label: p.label,
     owner: p.owner || "-",
   }));
@@ -294,7 +298,7 @@ const Contacts = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md ${
               activeSection === key
                 ? "bg-blue-600 text-white"
-                : "text-gray-600 hover:bg-gray-100"
+                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
             }`}
           >
             <Icon size={15} />
@@ -306,7 +310,7 @@ const Contacts = () => {
         {activeSection === "persons" && (
           <button
             onClick={openAddPerson}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-md"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
           >
             <Plus size={15} /> Add Person
           </button>
@@ -314,7 +318,7 @@ const Contacts = () => {
         {activeSection === "organisations" && (
           <button
             onClick={openAddOrg}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-md"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
           >
             <Plus size={15} /> Add Organisation
           </button>
@@ -428,34 +432,34 @@ const Contacts = () => {
     switch (activeSection) {
       case "persons":
         return (
-          <div className="bg-white border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
             <Table columns={columnSet.persons} data={personRows} onEdit={openEditPerson} onDelete={handleDeletePerson} />
           </div>
         );
       case "organisations":
         return (
-          <div className="bg-white border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
             <Table columns={columnSet.organisations} data={orgRows} onEdit={openEditOrg} onDelete={handleDeleteOrg} />
           </div>
         );
       case "timeline":
         return (
-          <div className="bg-white border border-gray-200">
-            <div className="divide-y divide-gray-100">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <div className="divide-y divide-gray-100 dark:divide-gray-700">
               {timeline.map((event) => (
                 <div key={event.id} className="flex items-start gap-3 px-5 py-3">
-                  <div className="p-1.5 rounded-full bg-blue-100 mt-0.5">
-                    <Clock size={14} className="text-blue-600" />
+                  <div className="p-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 mt-0.5">
+                    <Clock size={14} className="text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-900">
+                    <p className="text-sm text-gray-900 dark:text-gray-100">
                       <span className="font-medium">{event.personName}</span>
                       {" "}
-                      <span className="text-gray-500">— {event.action}</span>
+                      <span className="text-gray-500 dark:text-gray-400">— {event.action}</span>
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">{event.detail}</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{event.detail}</p>
                   </div>
-                  <span className="text-xs text-gray-400 whitespace-nowrap">{event.timestamp}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">{event.timestamp}</span>
                 </div>
               ))}
             </div>
