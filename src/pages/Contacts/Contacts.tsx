@@ -44,9 +44,7 @@ type Section = "persons" | "organisations" | "timeline";
 const itemsPerPage = 5;
 
 const defaultPersons: Person[] = [];
-
 const defaultOrganisations: Organisation[] = [];
-
 const defaultTimeline: TimelineEvent[] = [];
 
 const columnSet: Record<Section, { key: string; label: string }[]> = {
@@ -97,11 +95,11 @@ const Contacts = () => {
   const [activeSection, setActiveSection] = useState<Section>("persons");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [personModalOpen, setPersonModalOpen] = useState(false);
+  const [personSlideOpen, setPersonSlideOpen] = useState(false);
   const [editingPerson, setEditingPerson] = useState<Person | null>(null);
   const [deletingPerson, setDeletingPerson] = useState<Person | null>(null);
 
-  const [orgModalOpen, setOrgModalOpen] = useState(false);
+  const [orgSlideOpen, setOrgSlideOpen] = useState(false);
   const [editingOrg, setEditingOrg] = useState<Organisation | null>(null);
   const [deletingOrg, setDeletingOrg] = useState<Organisation | null>(null);
 
@@ -144,14 +142,14 @@ const Contacts = () => {
 
   const openAddPerson = () => {
     setEditingPerson(null);
-    setPersonModalOpen(true);
+    setPersonSlideOpen(true);
   };
 
   const openEditPerson = (row: Record<string, unknown>) => {
     const item = persons.find((p) => p.id === row.id);
     if (item) {
       setEditingPerson(item);
-      setPersonModalOpen(true);
+      setPersonSlideOpen(true);
     }
   };
 
@@ -181,6 +179,7 @@ const Contacts = () => {
       setPersons((prev) => [...prev, newPerson]);
       addTimelineEntry(timeline, setTimeline, `${data.firstName} ${data.lastName}`, "Added", "Added as new contact");
     }
+    setPersonSlideOpen(false);
   };
 
   const handleDeletePerson = (row: Record<string, unknown>) => {
@@ -199,14 +198,14 @@ const Contacts = () => {
 
   const openAddOrg = () => {
     setEditingOrg(null);
-    setOrgModalOpen(true);
+    setOrgSlideOpen(true);
   };
 
   const openEditOrg = (row: Record<string, unknown>) => {
     const item = organisations.find((o) => o.id === row.id);
     if (item) {
       setEditingOrg(item);
-      setOrgModalOpen(true);
+      setOrgSlideOpen(true);
     }
   };
 
@@ -227,6 +226,7 @@ const Contacts = () => {
       setOrganisations((prev) => [...prev, newOrg]);
       addTimelineEntry(timeline, setTimeline, data.name, "Added", "New organisation added");
     }
+    setOrgSlideOpen(false);
   };
 
   const handleDeleteOrg = (row: Record<string, unknown>) => {
@@ -273,7 +273,7 @@ const Contacts = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md ${
               activeSection === key
                 ? "bg-blue-600 text-white"
-                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                : "text-gray-400 hover:bg-gray-700"
             }`}
           >
             <Icon size={15} />
@@ -285,7 +285,7 @@ const Contacts = () => {
         {activeSection === "persons" && (
           <button
             onClick={openAddPerson}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-500 hover:bg-gray-700 rounded-md"
           >
             <Plus size={15} /> Add Person
           </button>
@@ -293,7 +293,7 @@ const Contacts = () => {
         {activeSection === "organisations" && (
           <button
             onClick={openAddOrg}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-500 hover:bg-gray-700 rounded-md"
           >
             <Plus size={15} /> Add Organisation
           </button>
@@ -305,13 +305,13 @@ const Contacts = () => {
   const footer = activeSection !== "timeline" ? (
     <div className="flex items-center justify-between px-5 py-2.5 text-sm">
       <p className="text-gray-400">
-        Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, activeSection === "persons" ? filteredPersons.length : filteredOrganisations.length)} of {activeSection === "persons" ? filteredPersons.length : filteredOrganisations.length} {activeSection === "persons" ? "persons" : "organisations"}
+        Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, activeSection === "persons" ? filteredPersons.length : filteredOrganisations.length)} of {activeSection === "persons" ? filteredPersons.length : filteredOrganisations.length}
       </p>
       <div className="flex items-center gap-2">
         <button
           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Previous
         </button>
@@ -322,7 +322,7 @@ const Contacts = () => {
             className={`px-3 py-1 text-xs rounded ${
               currentPage === page
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-white hover:bg-gray-800"
+                : "text-gray-400 hover:text-white hover:bg-gray-700"
             }`}
           >
             {page}
@@ -331,7 +331,7 @@ const Contacts = () => {
         <button
           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next
         </button>
@@ -407,34 +407,33 @@ const Contacts = () => {
     switch (activeSection) {
       case "persons":
         return (
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <div className="bg-gray-800 border border-gray-700">
             <Table columns={columnSet.persons} data={personRows} onEdit={openEditPerson} onDelete={handleDeletePerson} />
           </div>
         );
       case "organisations":
         return (
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <div className="bg-gray-800 border border-gray-700">
             <Table columns={columnSet.organisations} data={orgRows} onEdit={openEditOrg} onDelete={handleDeleteOrg} />
           </div>
         );
       case "timeline":
         return (
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-            <div className="divide-y divide-gray-100 dark:divide-gray-700">
+          <div className="bg-gray-800 border border-gray-700">
+            <div className="divide-y divide-gray-700">
               {timeline.map((event) => (
                 <div key={event.id} className="flex items-start gap-3 px-5 py-3">
-                  <div className="p-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 mt-0.5">
-                    <Clock size={14} className="text-blue-600 dark:text-blue-400" />
+                  <div className="p-1.5 rounded-full bg-blue-900/30 mt-0.5">
+                    <Clock size={14} className="text-blue-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-900 dark:text-gray-100">
-                      <span className="font-medium">{event.personName}</span>
-                      {" "}
-                      <span className="text-gray-500 dark:text-gray-400">— {event.action}</span>
+                    <p className="text-sm text-gray-100">
+                      <span className="font-medium">{event.personName}</span>{" "}
+                      <span className="text-gray-400">— {event.action}</span>
                     </p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{event.detail}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{event.detail}</p>
                   </div>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">{event.timestamp}</span>
+                  <span className="text-xs text-gray-500 whitespace-nowrap">{event.timestamp}</span>
                 </div>
               ))}
             </div>
@@ -458,20 +457,18 @@ const Contacts = () => {
       <div className="p-5">
         {renderContent()}
       </div>
-      {personModalOpen && (
-        <ContactFormModal
-          initialData={editingPerson ?? undefined}
-          onClose={() => setPersonModalOpen(false)}
-          onSave={handleSavePerson}
-        />
-      )}
-      {orgModalOpen && (
-        <OrganisationFormModal
-          initialData={editingOrg ?? undefined}
-          onClose={() => setOrgModalOpen(false)}
-          onSave={handleSaveOrg}
-        />
-      )}
+      <ContactFormModal
+        open={personSlideOpen}
+        initialData={editingPerson ?? undefined}
+        onClose={() => setPersonSlideOpen(false)}
+        onSave={handleSavePerson}
+      />
+      <OrganisationFormModal
+        open={orgSlideOpen}
+        initialData={editingOrg ?? undefined}
+        onClose={() => setOrgSlideOpen(false)}
+        onSave={handleSaveOrg}
+      />
       {deletingPerson && (
         <ConfirmDialog
           title="Delete Person"

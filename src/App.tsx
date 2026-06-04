@@ -1,4 +1,3 @@
-import { ThemeProvider } from "./utils/ThemeContext";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboad from "./pages/Dashboard/Dashboad";
@@ -9,16 +8,14 @@ import { Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <Routes>
-        <Route path="/oauth2/redirect" element={<RedirectHandler />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Dashboad />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/leads" element={<Leads />} />
-      </Routes>
-    </ThemeProvider>
+    <Routes>
+      <Route path="/oauth2/redirect" element={<RedirectHandler />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/" element={<Dashboad />} />
+      <Route path="/contacts" element={<Contacts />} />
+      <Route path="/leads" element={<Leads />} />
+    </Routes>
   );
 };
 

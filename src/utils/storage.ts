@@ -15,7 +15,9 @@ export function useLocalStorage<T>(key: string, initial: T): [T, (value: T | ((p
       const next = value instanceof Function ? value(prev) : value;
       try {
         localStorage.setItem(key, JSON.stringify(next));
-      } catch {}
+      } catch {
+        // ignore
+      }
       return next;
     });
   };

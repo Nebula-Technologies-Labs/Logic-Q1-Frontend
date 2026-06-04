@@ -1,17 +1,21 @@
 import { useState } from "react";
-import { TrendingUp, TrendingDown } from "lucide-react";
+
 import Layout from "../../components/layout/Layout";
 import Table from "../../components/common/Table";
-import Modal from "../../components/common/Modal";
+import ContactFormModal, { type PersonFormData } from "../../components/common/ContactFormModal";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 import { useLocalStorage } from "../../utils/storage";
 
-interface LeadItem extends Record<string, unknown> {
+interface Person {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   organization: string;
-  phone: string;
-  email: string;
+  phones: { id: string; number: string; type: "work" | "personal" }[];
+  emails: { id: string; address: string; type: "work" | "personal" }[];
+  label: string;
+  owner: string;
+  visibleTo: "everyone" | "only_me" | "team";
   status: string;
 }
 
@@ -25,33 +29,32 @@ const columns = [
 
 const itemsPerPage = 5;
 
-const leadStats = [
-  { label: "Conversion Rate", value: "23%", trend: "up", change: "+5%" },
-  { label: "Avg Deal Size", value: "$4,500", trend: "up", change: "+12%" },
-  { label: "Win Rate", value: "41%", trend: "down", change: "-3%" },
-];
+const leadStatuses = ["New", "Active"];
 
-const defaultData: LeadItem[] = [];
+const defaultData: Person[] = [];
 
 const Leads = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Leads");
   const [currentPage, setCurrentPage] = useState(1);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<LeadItem | null>(null);
-  const [deletingItem, setDeletingItem] = useState<LeadItem | null>(null);
-  const [allData, setAllData] = useLocalStorage<LeadItem[]>("leads", defaultData);
+  const [slideOpen, setSlideOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<Person | null>(null);
+  const [deletingItem, setDeletingItem] = useState<Person | null>(null);
 
-  const filters = ["All Leads", "New", "Active", "Closed"];
+  const [allData, setAllData] = useLocalStorage<Person[]>("contacts_persons", defaultData);
 
-  const filteredData = allData.filter((row) => {
+  const leads = allData.filter((p) => leadStatuses.includes(p.status));
+
+  const filters = ["All Leads", "New", "Active"];
+
+  const filteredData = leads.filter((row) => {
     const matchesFilter = activeFilter === "All Leads" || row.status === activeFilter;
     const q = searchQuery.toLowerCase();
     const matchesSearch =
       !q ||
-      row.name.toLowerCase().includes(q) ||
+      `${row.firstName} ${row.lastName}`.toLowerCase().includes(q) ||
       row.organization.toLowerCase().includes(q) ||
-      row.email.toLowerCase().includes(q);
+      row.emails[0]?.address.toLowerCase().includes(q);
     return matchesFilter && matchesSearch;
   });
 
@@ -66,30 +69,44 @@ const Leads = () => {
 
   const openAdd = () => {
     setEditingItem(null);
-    setModalOpen(true);
+    setSlideOpen(true);
   };
 
   const openEdit = (row: Record<string, unknown>) => {
     const item = allData.find((d) => d.id === row.id);
     if (item) {
       setEditingItem(item);
-      setModalOpen(true);
+      setSlideOpen(true);
     }
   };
 
-  const handleSave = (data: { name: string; organization: string; phone: string; email: string }) => {
+  const handleSave = (data: PersonFormData) => {
     if (editingItem) {
       setAllData((prev) =>
         prev.map((d) =>
-          d.id === editingItem.id ? { ...d, ...data } : d
+          d.id === editingItem.id
+            ? { ...d, firstName: data.firstName, lastName: data.lastName, organization: data.organization, phones: data.phones, emails: data.emails, label: data.label, owner: data.owner, visibleTo: data.visibleTo, status: data.status }
+            : d
         )
       );
     } else {
       setAllData((prev) => [
         ...prev,
-        { id: String(Date.now()), ...data, status: "New" },
+        {
+          id: String(Date.now()),
+          firstName: data.firstName,
+          lastName: data.lastName,
+          organization: data.organization,
+          phones: data.phones,
+          emails: data.emails,
+          label: data.label,
+          owner: data.owner,
+          visibleTo: data.visibleTo,
+          status: "New",
+        },
       ]);
     }
+    setSlideOpen(false);
   };
 
   const handleDelete = (row: Record<string, unknown>) => {
@@ -104,6 +121,15 @@ const Leads = () => {
     }
   };
 
+  const rows = paginatedData.map((p) => ({
+    id: p.id,
+    name: `${p.firstName} ${p.lastName}`,
+    organization: p.organization,
+    phone: p.phones[0]?.number ?? "-",
+    email: p.emails[0]?.address ?? "-",
+    status: p.status,
+  }));
+
   const subHeader = (
     <div className="flex items-center gap-2 px-5 py-2.5">
       {filters.map((f) => (
@@ -113,14 +139,14 @@ const Leads = () => {
           className={`px-3 py-1.5 text-sm font-medium rounded-md ${
             activeFilter === f
               ? "bg-blue-600 text-white"
-              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+              : "text-gray-400 hover:bg-gray-700"
           }`}
         >
           {f}
         </button>
       ))}
       <div className="ml-auto flex items-center gap-2">
-        <select className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select className="px-3 py-1.5 text-sm border border-gray-600 rounded-md text-gray-300 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option>All Sources</option>
           <option>Website</option>
           <option>Referral</option>
@@ -138,7 +164,7 @@ const Leads = () => {
         <button
           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Previous
         </button>
@@ -149,7 +175,7 @@ const Leads = () => {
             className={`px-3 py-1 text-xs rounded ${
               currentPage === page
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-white hover:bg-gray-800"
+                : "text-gray-400 hover:text-white hover:bg-gray-700"
             }`}
           >
             {page}
@@ -158,32 +184,10 @@ const Leads = () => {
         <button
           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next
         </button>
-      </div>
-    </div>
-  );
-
-  const rightPanelContent = (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Lead Metrics</h3>
-        <div className="space-y-2">
-          {leadStats.map(({ label, value, trend, change }) => (
-            <div key={label} className="flex items-center justify-between px-3 py-3 rounded-lg bg-gray-800">
-              <div>
-                <p className="text-xs text-gray-400">{label}</p>
-                <p className="text-lg font-bold text-white">{value}</p>
-              </div>
-              <div className={`flex items-center gap-1 text-xs font-medium ${trend === "up" ? "text-blue-400" : "text-gray-400"}`}>
-                {trend === "up" ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-                {change}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -192,27 +196,25 @@ const Leads = () => {
     <Layout
       subHeader={subHeader}
       footer={footer}
-      rightPanel={rightPanelContent}
       searchValue={searchQuery}
       onSearch={setSearchQuery}
       onAddNew={openAdd}
     >
       <div className="p-5">
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <Table columns={columns} data={paginatedData} onEdit={openEdit} onDelete={handleDelete} />
+        <div className="bg-gray-800 border border-gray-700">
+          <Table columns={columns} data={rows} onEdit={openEdit} onDelete={handleDelete} />
         </div>
       </div>
-      {modalOpen && (
-        <Modal
-          initialData={editingItem ?? undefined}
-          onClose={() => setModalOpen(false)}
-          onSave={handleSave}
-        />
-      )}
+      <ContactFormModal
+        open={slideOpen}
+        initialData={editingItem ?? undefined}
+        onClose={() => setSlideOpen(false)}
+        onSave={handleSave}
+      />
       {deletingItem && (
         <ConfirmDialog
           title="Delete Lead"
-          message={`Are you sure you want to delete "${deletingItem.name}"?`}
+          message={`Are you sure you want to delete "${deletingItem.firstName} ${deletingItem.lastName}"?`}
           onConfirm={confirmDelete}
           onCancel={() => setDeletingItem(null)}
         />
