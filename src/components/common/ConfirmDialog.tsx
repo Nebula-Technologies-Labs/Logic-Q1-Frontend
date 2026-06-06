@@ -10,19 +10,19 @@ interface ConfirmDialogProps {
 const ConfirmDialog = ({ title, message, onConfirm, onCancel }: ConfirmDialogProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50" onClick={onCancel} />
-      <div className="relative bg-white bg-gray-800 rounded-lg shadow-xl w-full max-w-sm mx-4 p-6">
+      <div className="fixed inset-0 bg-gray-900/50" onClick={onCancel} />
+      <div className="relative bg-white bg-white rounded-lg shadow-xl w-full max-w-sm mx-4 p-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-gray-900 text-gray-100">{title}</h2>
-          <button onClick={onCancel} className="p-1 rounded hover:bg-gray-100 hover:bg-gray-700">
-            <X size={18} className="text-gray-500 text-gray-400" />
+          <h2 className="text-lg font-semibold text-gray-900 text-gray-900">{title}</h2>
+          <button onClick={onCancel} className="p-1 rounded hover:bg-gray-100 hover:bg-gray-100">
+            <X size={18} className="text-gray-500 text-gray-500" />
           </button>
         </div>
-        <p className="text-sm text-gray-600 text-gray-400 mb-6">{message}</p>
+        <p className="text-sm text-gray-600 text-gray-500 mb-6">{message}</p>
         <div className="flex justify-end gap-2">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-sm font-medium text-gray-700 text-gray-300 bg-gray-100 bg-gray-700 hover:bg-gray-200 hover:bg-gray-600 rounded-md"
+            className="px-4 py-2 text-sm font-medium text-gray-700 text-gray-700 bg-gray-100 bg-gray-100 hover:bg-gray-200 hover:bg-gray-200 rounded-md"
           >
             Cancel
           </button>

@@ -24,20 +24,20 @@ const SlidePanel = ({ open, onClose, title, children }: SlidePanelProps) => {
     <>
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/50"
+          className="fixed inset-0 z-40 bg-gray-900/50"
           onClick={onClose}
         />
       )}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-full max-w-lg bg-gray-900 border-l border-gray-700 shadow-xl transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-50 h-full w-full max-w-lg bg-white border-l border-gray-200 shadow-xl transform transition-transform duration-300 ease-in-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between h-14 px-5 border-b border-gray-700">
-          <h2 className="text-base font-semibold text-gray-100">{title}</h2>
+        <div className="flex items-center justify-between h-14 px-5 border-b border-gray-200">
+          <h2 className="text-base font-semibold text-gray-900">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded hover:bg-gray-700 text-gray-400 hover:text-gray-200"
+            className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-800"
           >
             <X size={18} />
           </button>

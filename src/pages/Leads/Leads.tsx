@@ -139,14 +139,14 @@ const Leads = () => {
           className={`px-3 py-1.5 text-sm font-medium rounded-md ${
             activeFilter === f
               ? "bg-blue-600 text-white"
-              : "text-gray-400 hover:bg-gray-700"
+              : "text-gray-500 hover:bg-gray-100"
           }`}
         >
           {f}
         </button>
       ))}
       <div className="ml-auto flex items-center gap-2">
-        <select className="px-3 py-1.5 text-sm border border-gray-600 rounded-md text-gray-300 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option>All Sources</option>
           <option>Website</option>
           <option>Referral</option>
@@ -157,14 +157,14 @@ const Leads = () => {
 
   const footer = (
     <div className="flex items-center justify-between px-5 py-2.5 text-sm">
-      <p className="text-gray-400">
+      <p className="text-gray-500">
         Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredData.length)} of {filteredData.length} leads
       </p>
       <div className="flex items-center gap-2">
         <button
           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-500 hover:text-gray-900 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Previous
         </button>
@@ -175,7 +175,7 @@ const Leads = () => {
             className={`px-3 py-1 text-xs rounded ${
               currentPage === page
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-white hover:bg-gray-700"
+                : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
             }`}
           >
             {page}
@@ -184,7 +184,7 @@ const Leads = () => {
         <button
           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-500 hover:text-gray-900 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next
         </button>
@@ -201,7 +201,7 @@ const Leads = () => {
       onAddNew={openAdd}
     >
       <div className="p-5">
-        <div className="bg-gray-800 border border-gray-700">
+        <div className="bg-white border border-gray-200">
           <Table columns={columns} data={rows} onEdit={openEdit} onDelete={handleDelete} />
         </div>
       </div>

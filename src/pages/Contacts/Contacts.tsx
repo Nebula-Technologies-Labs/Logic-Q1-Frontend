@@ -273,7 +273,7 @@ const Contacts = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md ${
               activeSection === key
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:bg-gray-700"
+                : "text-gray-500 hover:bg-gray-100"
             }`}
           >
             <Icon size={15} />
@@ -285,7 +285,7 @@ const Contacts = () => {
         {activeSection === "persons" && (
           <button
             onClick={openAddPerson}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-500 hover:bg-gray-700 rounded-md"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-gray-100 rounded-md"
           >
             <Plus size={15} /> Add Person
           </button>
@@ -293,7 +293,7 @@ const Contacts = () => {
         {activeSection === "organisations" && (
           <button
             onClick={openAddOrg}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-500 hover:bg-gray-700 rounded-md"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-gray-100 rounded-md"
           >
             <Plus size={15} /> Add Organisation
           </button>
@@ -304,14 +304,14 @@ const Contacts = () => {
 
   const footer = activeSection !== "timeline" ? (
     <div className="flex items-center justify-between px-5 py-2.5 text-sm">
-      <p className="text-gray-400">
+      <p className="text-gray-500">
         Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, activeSection === "persons" ? filteredPersons.length : filteredOrganisations.length)} of {activeSection === "persons" ? filteredPersons.length : filteredOrganisations.length}
       </p>
       <div className="flex items-center gap-2">
         <button
           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-500 hover:text-gray-900 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Previous
         </button>
@@ -322,7 +322,7 @@ const Contacts = () => {
             className={`px-3 py-1 text-xs rounded ${
               currentPage === page
                 ? "bg-blue-600 text-white"
-                : "text-gray-400 hover:text-white hover:bg-gray-700"
+                : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
             }`}
           >
             {page}
@@ -331,7 +331,7 @@ const Contacts = () => {
         <button
           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 text-gray-400 hover:text-white rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-gray-500 hover:text-gray-900 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next
         </button>
@@ -345,26 +345,26 @@ const Contacts = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Contact Labels</h3>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Contact Labels</h3>
               <div className="space-y-2 text-sm">
                 {["Client", "Partner", "Supplier", "Internal", "VIP"].map((group) => (
-                  <div key={group} className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-800">
-                    <span className="text-gray-300">{group}</span>
+                  <div key={group} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white">
+                    <span className="text-gray-700">{group}</span>
                     <span className="text-xs text-gray-500">{persons.filter((p) => p.label === group).length}</span>
                   </div>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Visibility</h3>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Visibility</h3>
               <div className="space-y-2 text-sm">
                 {[
                   { key: "everyone", label: "Everyone" },
                   { key: "team", label: "Team" },
                   { key: "only_me", label: "Only me" },
                 ].map((v) => (
-                  <div key={v.key} className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-800">
-                    <span className="text-gray-300">{v.label}</span>
+                  <div key={v.key} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white">
+                    <span className="text-gray-700">{v.label}</span>
                     <span className="text-xs text-gray-500">{persons.filter((p) => p.visibleTo === v.key).length}</span>
                   </div>
                 ))}
@@ -376,11 +376,11 @@ const Contacts = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Industries</h3>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Industries</h3>
               <div className="space-y-2 text-sm">
                 {["Technology", "Research", "Manufacturing", "Pharmaceuticals", "Insurance", "Defense"].map((ind) => (
-                  <div key={ind} className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-800">
-                    <span className="text-gray-300">{ind}</span>
+                  <div key={ind} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white">
+                    <span className="text-gray-700">{ind}</span>
                     <span className="text-xs text-gray-500">{organisations.filter((o) => o.industry === ind).length}</span>
                   </div>
                 ))}
@@ -391,10 +391,10 @@ const Contacts = () => {
       case "timeline":
         return (
           <div>
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Activity Summary</h3>
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Activity Summary</h3>
             <div className="space-y-2 text-sm">
-              <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-800">
-                <span className="text-gray-300">Total Events</span>
+              <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white">
+                <span className="text-gray-700">Total Events</span>
                 <span className="text-xs text-gray-500">{timeline.length}</span>
               </div>
             </div>
@@ -407,29 +407,29 @@ const Contacts = () => {
     switch (activeSection) {
       case "persons":
         return (
-          <div className="bg-gray-800 border border-gray-700">
+          <div className="bg-white border border-gray-200">
             <Table columns={columnSet.persons} data={personRows} onEdit={openEditPerson} onDelete={handleDeletePerson} />
           </div>
         );
       case "organisations":
         return (
-          <div className="bg-gray-800 border border-gray-700">
+          <div className="bg-white border border-gray-200">
             <Table columns={columnSet.organisations} data={orgRows} onEdit={openEditOrg} onDelete={handleDeleteOrg} />
           </div>
         );
       case "timeline":
         return (
-          <div className="bg-gray-800 border border-gray-700">
-            <div className="divide-y divide-gray-700">
+          <div className="bg-white border border-gray-200">
+            <div className="divide-y divide-gray-200">
               {timeline.map((event) => (
                 <div key={event.id} className="flex items-start gap-3 px-5 py-3">
-                  <div className="p-1.5 rounded-full bg-blue-900/30 mt-0.5">
-                    <Clock size={14} className="text-blue-400" />
+                  <div className="p-1.5 rounded-full bg-blue-50 mt-0.5">
+                    <Clock size={14} className="text-blue-500" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-100">
+                    <p className="text-sm text-gray-900">
                       <span className="font-medium">{event.personName}</span>{" "}
-                      <span className="text-gray-400">— {event.action}</span>
+                      <span className="text-gray-500">— {event.action}</span>
                     </p>
                     <p className="text-xs text-gray-500 mt-0.5">{event.detail}</p>
                   </div>

@@ -112,23 +112,23 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
       <form onSubmit={handleSubmit} className="p-5 space-y-5">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">First Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
             <input
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="John"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Last Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
             <input
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Doe"
               required
             />
@@ -136,20 +136,20 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Organization</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Organization</label>
           <input
             type="text"
             value={organization}
             onChange={(e) => setOrganization(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Acme Corp"
           />
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium text-gray-300">Phone Numbers</label>
-            <button type="button" onClick={addPhone} className="text-xs text-blue-500 hover:text-blue-400 font-medium flex items-center gap-1">
+            <label className="block text-sm font-medium text-gray-700">Phone Numbers</label>
+            <button type="button" onClick={addPhone} className="text-xs text-blue-600 hover:text-blue-500 font-medium flex items-center gap-1">
               <Plus size={14} /> Add another
             </button>
           </div>
@@ -160,19 +160,19 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
                   type="tel"
                   value={phone.number}
                   onChange={(e) => updatePhone(phone.id, "number", e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="(555) 123-4567"
                 />
                 <select
                   value={phone.type}
                   onChange={(e) => updatePhone(phone.id, "type", e.target.value)}
-                  className="w-28 px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-28 px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="work">Work</option>
                   <option value="personal">Personal</option>
                 </select>
                 {phones.length > 1 && (
-                  <button type="button" onClick={() => removePhone(phone.id)} className="p-2 text-gray-400 hover:text-red-400">
+                  <button type="button" onClick={() => removePhone(phone.id)} className="p-2 text-gray-500 hover:text-red-600">
                     <Trash2 size={16} />
                   </button>
                 )}
@@ -183,8 +183,8 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium text-gray-300">Email Addresses</label>
-            <button type="button" onClick={addEmail} className="text-xs text-blue-500 hover:text-blue-400 font-medium flex items-center gap-1">
+            <label className="block text-sm font-medium text-gray-700">Email Addresses</label>
+            <button type="button" onClick={addEmail} className="text-xs text-blue-600 hover:text-blue-500 font-medium flex items-center gap-1">
               <Plus size={14} /> Add another
             </button>
           </div>
@@ -195,19 +195,19 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
                   type="email"
                   value={email.address}
                   onChange={(e) => updateEmail(email.id, "address", e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="john@acme.com"
                 />
                 <select
                   value={email.type}
                   onChange={(e) => updateEmail(email.id, "type", e.target.value)}
-                  className="w-28 px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-28 px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="work">Work</option>
                   <option value="personal">Personal</option>
                 </select>
                 {emails.length > 1 && (
-                  <button type="button" onClick={() => removeEmail(email.id)} className="p-2 text-gray-400 hover:text-red-400">
+                  <button type="button" onClick={() => removeEmail(email.id)} className="p-2 text-gray-500 hover:text-red-600">
                     <Trash2 size={16} />
                   </button>
                 )}
@@ -218,11 +218,11 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Status</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {statusOptions.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
@@ -230,11 +230,11 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Label</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Label</label>
             <select
               value={label}
               onChange={(e) => setLabel(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {labelOptions.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
@@ -242,21 +242,21 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Owner</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Owner</label>
             <input
               type="text"
               value={owner}
               onChange={(e) => setOwner(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Assign to..."
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Visible To</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Visible To</label>
             <select
               value={visibleTo}
               onChange={(e) => setVisibleTo(e.target.value as "everyone" | "only_me" | "team")}
-              className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {visibleOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -265,11 +265,11 @@ const ContactFormModal = ({ open, initialData, onClose, onSave }: ContactFormMod
           </div>
         </div>
 
-        <div className="flex justify-end gap-2 pt-2 border-t border-gray-700">
+        <div className="flex justify-end gap-2 pt-2 border-t border-gray-200">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-md"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md"
           >
             Cancel
           </button>
