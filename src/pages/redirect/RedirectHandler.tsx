@@ -8,8 +8,13 @@ const RedirectHandler = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const token = params.get("token");
+    const name = params.get("name");
+    const email = params.get("email");
     if (token) {
       localStorage.setItem("token", token);
+      if (name || email) {
+        localStorage.setItem("user_info", JSON.stringify({ name: name || email?.split("@")[0] || "User", email: email || "" }));
+      }
       navigate("/");
     }
   }, [location.search, navigate]);

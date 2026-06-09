@@ -2,25 +2,21 @@ import { useState } from "react";
 import SlidePanel from "./SlidePanel";
 
 export interface OrganisationFormData {
-  name: string;
-  industry: string;
-  phone: string;
-  email: string;
-  website: string;
-  address: string;
+  name: string; industry: string; phone: string; email: string; website: string; address: string;
 }
 
 interface OrganisationFormModalProps {
-  open: boolean;
-  initialData?: OrganisationFormData;
-  onClose: () => void;
-  onSave: (data: OrganisationFormData) => void;
+  open: boolean; initialData?: OrganisationFormData;
+  onClose: () => void; onSave: (data: OrganisationFormData) => void;
 }
 
 const industryOptions = [
   "Technology", "Research", "Manufacturing", "Pharmaceuticals",
   "Insurance", "Defense", "Finance", "Healthcare", "Education", "Other",
 ];
+
+const inputClass = "w-full px-3 py-2 border border-outline-variant rounded-lg text-body-md bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all";
+const labelClass = "block text-sm font-medium text-on-surface-variant mb-1";
 
 const OrganisationFormModal = ({ open, initialData, onClose, onSave }: OrganisationFormModalProps) => {
   const [name, setName] = useState(initialData?.name ?? "");
@@ -38,86 +34,40 @@ const OrganisationFormModal = ({ open, initialData, onClose, onSave }: Organisat
 
   return (
     <SlidePanel open={open} onClose={onClose} title={initialData ? "Edit Organisation" : "Add New Organisation"}>
-      <form onSubmit={handleSubmit} className="p-5 space-y-4">
+      <form onSubmit={handleSubmit} className="p-6 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Acme Corp"
-            required
-          />
+          <label className={labelClass}>Name</label>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputClass} placeholder="Acme Corp" required />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
-            <select
-              value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {industryOptions.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
+            <label className={labelClass}>Industry</label>
+            <select value={industry} onChange={(e) => setIndustry(e.target.value)} className={inputClass}>
+              {industryOptions.map((opt) => (<option key={opt} value={opt}>{opt}</option>))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="(555) 000-0000"
-            />
+            <label className={labelClass}>Phone</label>
+            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} placeholder="(555) 000-0000" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="info@acme.com"
-            />
+            <label className={labelClass}>Email</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} placeholder="info@acme.com" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Website</label>
-            <input
-              type="url"
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://acme.com"
-            />
+            <label className={labelClass}>Website</label>
+            <input type="url" value={website} onChange={(e) => setWebsite(e.target.value)} className={inputClass} placeholder="https://acme.com" />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-          <textarea
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            rows={2}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="123 Main St, City, Country"
-          />
+          <label className={labelClass}>Address</label>
+          <textarea value={address} onChange={(e) => setAddress(e.target.value)} rows={2} className={inputClass} placeholder="123 Main St, City, Country" />
         </div>
-        <div className="flex justify-end gap-2 pt-2 border-t border-gray-200">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
-          >
-            {initialData ? "Update" : "Save"}
-          </button>
+        <div className="flex justify-end gap-4 pt-4 border-t border-outline-variant">
+          <button type="button" onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-on-surface bg-surface-container hover:bg-surface-container-high rounded-lg transition-colors">Cancel</button>
+          <button type="submit"
+            className="px-4 py-2 text-sm font-medium text-on-primary bg-primary hover:opacity-90 rounded-lg transition-all shadow-sm">{initialData ? "Update" : "Save"}</button>
         </div>
       </form>
     </SlidePanel>

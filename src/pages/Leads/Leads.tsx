@@ -5,6 +5,7 @@ import Table from "../../components/common/Table";
 import ContactFormModal, { type PersonFormData } from "../../components/common/ContactFormModal";
 import ConfirmDialog from "../../components/common/ConfirmDialog";
 import { useLocalStorage } from "../../utils/storage";
+import { addActivityEntry } from "../../utils/activity";
 
 interface Person {
   id: string;
@@ -89,6 +90,7 @@ const Leads = () => {
             : d
         )
       );
+      addActivityEntry(`Lead Updated: ${data.firstName} ${data.lastName}`, data.organization || "No organization", "lead");
     } else {
       setAllData((prev) => [
         ...prev,
@@ -105,6 +107,7 @@ const Leads = () => {
           status: "New",
         },
       ]);
+      addActivityEntry(`New Lead: ${data.firstName} ${data.lastName}`, data.organization || "No organization", "lead");
     }
     setSlideOpen(false);
   };
@@ -116,7 +119,9 @@ const Leads = () => {
 
   const confirmDelete = () => {
     if (deletingItem) {
+      const name = `${deletingItem.firstName} ${deletingItem.lastName}`;
       setAllData((prev) => prev.filter((d) => d.id !== deletingItem.id));
+      addActivityEntry(`Lead Deleted: ${name}`, "Lead removed", "lead");
       setDeletingItem(null);
     }
   };
@@ -131,22 +136,22 @@ const Leads = () => {
   }));
 
   const subHeader = (
-    <div className="flex items-center gap-2 px-5 py-2.5">
+    <div className="flex items-center gap-2 px-6 py-3">
       {filters.map((f) => (
         <button
           key={f}
           onClick={() => handleFilterClick(f)}
-          className={`px-3 py-1.5 text-sm font-medium rounded-md ${
+          className={`px-md py-1.5 text-sm font-medium rounded-lg transition-all ${
             activeFilter === f
-              ? "bg-blue-600 text-white"
-              : "text-gray-500 hover:bg-gray-100"
+              ? "bg-primary-container text-on-primary-container font-bold"
+              : "text-on-surface-variant hover:bg-surface-container-high"
           }`}
         >
           {f}
         </button>
       ))}
       <div className="ml-auto flex items-center gap-2">
-        <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select className="px-4 py-1.5 text-sm border border-outline-variant rounded-lg text-on-surface bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20">
           <option>All Sources</option>
           <option>Website</option>
           <option>Referral</option>
@@ -156,15 +161,15 @@ const Leads = () => {
   );
 
   const footer = (
-    <div className="flex items-center justify-between px-5 py-2.5 text-sm">
-      <p className="text-gray-500">
+    <div className="flex items-center justify-between px-6 py-2.5 text-sm">
+      <p className="text-on-surface-variant">
         Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredData.length)} of {filteredData.length} leads
       </p>
       <div className="flex items-center gap-2">
         <button
           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          className="px-3 py-1 text-gray-500 hover:text-gray-900 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-on-surface-variant hover:text-on-surface rounded hover:bg-surface-container disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Previous
         </button>
@@ -174,8 +179,8 @@ const Leads = () => {
             onClick={() => setCurrentPage(page)}
             className={`px-3 py-1 text-xs rounded ${
               currentPage === page
-                ? "bg-blue-600 text-white"
-                : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                ? "bg-primary text-on-primary"
+                : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
             }`}
           >
             {page}
@@ -184,7 +189,7 @@ const Leads = () => {
         <button
           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 text-gray-500 hover:text-gray-900 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-on-surface-variant hover:text-on-surface rounded hover:bg-surface-container disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next
         </button>
@@ -200,8 +205,8 @@ const Leads = () => {
       onSearch={setSearchQuery}
       onAddNew={openAdd}
     >
-      <div className="p-5">
-        <div className="bg-white border border-gray-200">
+      <div className="p-6">
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
           <Table columns={columns} data={rows} onEdit={openEdit} onDelete={handleDelete} />
         </div>
       </div>

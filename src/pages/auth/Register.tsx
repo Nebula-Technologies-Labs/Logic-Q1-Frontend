@@ -1,16 +1,13 @@
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BarChart3, Mail, Lock, User } from "lucide-react";
 import AxiosInstance from "../../api/axios";
 
 const Register = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [agreeTerms, setAgreeTerms] = useState(false);
 
@@ -21,151 +18,116 @@ const Register = () => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-
-    if (!agreeTerms) {
-      newErrors.terms = "You must agree to the terms and conditions";
-    }
-
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Please enter a valid email";
+    if (!formData.password) newErrors.password = "Password is required";
+    else if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters";
+    if (!agreeTerms) newErrors.terms = "You must agree to the terms and conditions";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => { const n = { ...prev }; delete n[name]; return n; });
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     setIsLoading("email");
-
     try {
-      const res = await AxiosInstance.post("/api/auth/register", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      });
+      const res = await AxiosInstance.post("/api/auth/register", formData);
       const token = res.data.token;
-      if (token) {
-        localStorage.setItem("token", token);
-        navigate("/");
-      } else {
-        setErrors({ email: "Account created but no token returned. Please log in." });
-      }
+      if (token) { localStorage.setItem("token", token); navigate("/"); }
+      else setErrors({ email: "Account created but no token returned. Please log in." });
     } catch {
-      if (import.meta.env.DEV) {
-        console.warn("Dev mode: backend unavailable, using mock token");
-        localStorage.setItem("token", "dev-mode-token");
-        navigate("/");
-      } else {
-        setErrors({ email: "Registration failed. Please try again." });
-      }
-    } finally {
-      setIsLoading(null);
-    }
+      if (import.meta.env.DEV) { localStorage.setItem("token", "dev-mode-token"); localStorage.setItem("user_info", JSON.stringify({ name: formData.name, email: formData.email })); navigate("/"); }
+      else setErrors({ email: "Registration failed. Please try again." });
+    } finally { setIsLoading(null); }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gray-50 ">
-      <div className="bg-white  rounded-2xl shadow-xl p-8 border border-gray-200 ">
-        <div className="w-full max-w-md">
-            <img
-              src="/assets/logo.png"
-              alt="Logic Q1 Logo"
-              className="h-24 w-auto mx-auto drop-shadow-lg mb-2"
-            />
-          <form onSubmit={handleRegister} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-900  mb-2">
-                Name
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-lg py-8 bg-background">
+      <div className="w-full max-w-[440px] flex flex-col gap-6">
+        <div className="flex flex-col items-center text-center gap-1">
+          <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mb-2 shadow-md">
+            <BarChart3 size={28} className="text-on-primary" />
+          </div>
+          <h1 className="text-headline-lg font-headline-lg text-on-background tracking-tight">Logic Q1</h1>
+          <p className="text-body-md font-body-md text-on-surface-variant max-w-[280px]">
+            Create your account to get started.
+          </p>
+        </div>
+
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-xl shadow-[0_8px_24px_rgba(9,30,66,0.08)]">
+          <form onSubmit={handleRegister} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-label-sm font-label-sm text-on-surface-variant uppercase" htmlFor="name">
+                Full Name
               </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="John"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white  text-gray-900  ${
-                   errors.name ? "border-red-500" : "border-gray-300 "
-                 }`}
-                 disabled={isLoading !== null}
-               />
-               {errors.name && (
-                 <p className="text-xs text-red-600  mt-1">{errors.name}</p>
-               )}
+              <div className="relative group">
+                <User size={18} className="absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors" />
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="John Doe"
+                  className={`w-full pl-12 pr-4 py-[10px] bg-white border rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 transition-all placeholder:text-outline text-on-surface ${
+                    errors.name ? "border-error" : "border-outline-variant focus:border-primary focus:ring-primary/20"
+                  }`}
+                  disabled={isLoading !== null}
+                />
+              </div>
+              {errors.name && <p className="text-xs text-error mt-1">{errors.name}</p>}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-900  mb-2">
+            <div className="flex flex-col gap-1">
+              <label className="text-label-sm font-label-sm text-on-surface-variant uppercase" htmlFor="email">
                 Email Address
               </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="john@example.com"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white  text-gray-900  ${
-                   errors.email ? "border-red-500" : "border-gray-300 "
-                 }`}
-                 disabled={isLoading !== null}
-               />
-               {errors.email && (
-                 <p className="text-xs text-red-600  mt-1">{errors.email}</p>
-               )}
+              <div className="relative group">
+                <Mail size={18} className="absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors" />
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="john@company.com"
+                  className={`w-full pl-12 pr-4 py-[10px] bg-white border rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 transition-all placeholder:text-outline text-on-surface ${
+                    errors.email ? "border-error" : "border-outline-variant focus:border-primary focus:ring-primary/20"
+                  }`}
+                  disabled={isLoading !== null}
+                />
+              </div>
+              {errors.email && <p className="text-xs text-error mt-1">{errors.email}</p>}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-900  mb-2">
+            <div className="flex flex-col gap-1">
+              <label className="text-label-sm font-label-sm text-on-surface-variant uppercase" htmlFor="password">
                 Password
               </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="••••••••"
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white  text-gray-900  ${
-                   errors.password ? "border-red-500" : "border-gray-300 "
-                 }`}
-                 disabled={isLoading !== null}
-               />
-               {errors.password && (
-                 <p className="text-xs text-red-600  mt-1">{errors.password}</p>
-               )}
-               <p className="text-xs text-gray-500  mt-1">
-                At least 8 characters
-              </p>
+              <div className="relative group">
+                <Lock size={18} className="absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors" />
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="••••••••"
+                  className={`w-full pl-12 pr-4 py-[10px] bg-white border rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 transition-all placeholder:text-outline text-on-surface ${
+                    errors.password ? "border-error" : "border-outline-variant focus:border-primary focus:ring-primary/20"
+                  }`}
+                  disabled={isLoading !== null}
+                />
+              </div>
+              {errors.password ? <p className="text-xs text-error mt-1">{errors.password}</p> : <p className="text-xs text-on-surface-variant mt-1">At least 8 characters</p>}
             </div>
 
             <div className="flex items-start gap-3 pt-2">
@@ -173,80 +135,57 @@ const Register = () => {
                 type="checkbox"
                 id="terms"
                 checked={agreeTerms}
-                onChange={(e) => {
-                  setAgreeTerms(e.target.checked);
-                  if (errors.terms) {
-                    setErrors((prev) => {
-                      const newErrors = { ...prev };
-                      delete newErrors.terms;
-                      return newErrors;
-                    });
-                  }
-                }}
-                className="mt-1 cursor-pointer"
+                onChange={(e) => { setAgreeTerms(e.target.checked); if (errors.terms) { const n = { ...errors }; delete n.terms; setErrors(n); } }}
+                className="mt-1 w-4 h-4 rounded-sm border-outline text-primary focus:ring-primary cursor-pointer"
                 disabled={isLoading !== null}
               />
-              <label htmlFor="terms" className="text-sm text-gray-700 ">
-                I agree to the{" "}
-                 <a
-                   href="#"
-                   className="text-blue-600 hover:underline font-medium"
-                 >
-                   Terms and Conditions
-                 </a>{" "}
-                 and{" "}
-                 <a
-                   href="#"
-                   className="text-blue-600 hover:underline font-medium"
-                 >
-                   Privacy Policy
-                 </a>
+              <label htmlFor="terms" className="text-body-md font-body-md text-on-surface-variant cursor-pointer select-none">
+                I agree to the{' '}
+                <a href="#" className="text-primary hover:underline font-medium">Terms and Conditions</a>{' '}
+                and{' '}
+                <a href="#" className="text-primary hover:underline font-medium">Privacy Policy</a>
               </label>
             </div>
-            {errors.terms && (
-               <p className="text-xs text-red-600  mt-1">{errors.terms}</p>
-            )}
+            {errors.terms && <p className="text-xs text-error">{errors.terms}</p>}
 
             <button
               type="submit"
               disabled={isLoading !== null || !agreeTerms}
-              className="w-full px-4 py-3 bg-black  text-white font-medium rounded-lg hover:bg-gray-800  transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-6"
+              className="w-full bg-primary text-on-primary font-body-lg text-body-lg py-4 rounded-lg font-semibold hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all shadow-sm disabled:opacity-70"
             >
               {isLoading === "email" ? "Creating Account..." : "Create Account"}
             </button>
-          </form>
 
-          <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200 "></div>
-            <span className="text-xs font-medium text-gray-500 ">OR</span>
-            <div className="flex-1 h-px bg-gray-200 "></div>
-          </div>
-          <div className="space-y-2 mb-6">
+            <div className="flex items-center gap-4 py-2">
+              <div className="h-px flex-1 bg-outline-variant" />
+              <span className="text-label-sm font-label-sm text-outline uppercase">Or continue with</span>
+              <div className="h-px flex-1 bg-outline-variant" />
+            </div>
+
             <button
+              type="button"
               onClick={handleGoogleAuth}
               disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-300  hover:border-gray-400  hover:bg-gray-50  rounded-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 py-[10px] px-4 border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface hover:bg-surface-container transition-colors disabled:opacity-70"
             >
-              <FaGoogle className="text-lg text-blue-600" />
-              <span className="font-medium text-gray-900 ">
-                {isLoading === "google"
-                  ? "Signing up..."
-                  : "Sign up with Google"}
-              </span>
+              <FaGoogle className="text-lg text-primary" />
+              <span>{isLoading === "google" ? "Signing up..." : "Sign up with Google"}</span>
             </button>
-          </div>
+          </form>
         </div>
 
-        <div className="mt-6 text-center text-sm text-gray-500 ">
-          <p>
-            Already have an account?{" "}
-            <button
-              onClick={() => navigate("/login")}
-              className="font-medium text-blue-600 hover:underline"
-            >
+        <div className="text-center">
+          <p className="font-body-md text-body-md text-on-surface-variant">
+            Already have an account?{' '}
+            <button onClick={() => navigate("/login")} className="text-primary font-semibold hover:underline">
               Sign in here
             </button>
           </p>
+        </div>
+
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] bg-surface-container rounded-full blur-3xl opacity-40" />
+          <div className="absolute bottom-[5%] left-[5%] w-[300px] h-[300px] bg-secondary-container rounded-full blur-3xl opacity-30" />
         </div>
       </div>
     </div>

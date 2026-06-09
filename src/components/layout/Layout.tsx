@@ -9,14 +9,14 @@ interface LayoutProps {
   footer?: React.ReactNode;
   searchValue: string;
   onSearch: (value: string) => void;
-  onAddNew: () => void;
+  onAddNew?: () => void;
 }
 
 const Layout = ({ children, rightPanel, subHeader, footer, searchValue, onSearch, onAddNew }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-50 bg-gray-50">
+    <div className="flex h-screen bg-background">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex flex-col flex-1 min-w-0">
         <Navbar
@@ -26,7 +26,7 @@ const Layout = ({ children, rightPanel, subHeader, footer, searchValue, onSearch
           searchValue={searchValue}
         />
         {subHeader && (
-          <div className="border-b border-gray-200 border-gray-200 bg-white bg-white">
+          <div className="border-b border-outline-variant bg-surface-container-lowest">
             {subHeader}
           </div>
         )}
@@ -35,13 +35,13 @@ const Layout = ({ children, rightPanel, subHeader, footer, searchValue, onSearch
             {children}
           </main>
           {rightPanel && (
-            <aside className="hidden lg:block w-96 bg-white border-l border-gray-200 overflow-y-auto p-5">
+            <aside className="hidden lg:block w-96 bg-surface-container-lowest border-l border-outline-variant overflow-y-auto p-6">
               {rightPanel}
             </aside>
           )}
         </div>
         {footer && (
-          <div className="bg-white border-t border-gray-200">
+          <div className="bg-surface-container-lowest border-t border-outline-variant">
             {footer}
           </div>
         )}
