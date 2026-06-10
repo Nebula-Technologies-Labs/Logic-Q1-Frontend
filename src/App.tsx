@@ -3,6 +3,7 @@ import Register from "./pages/auth/Register";
 import Dashboad from "./pages/Dashboard/Dashboad";
 import Contacts from "./pages/Contacts/Contacts";
 import ContactDetail from "./pages/ContactDetail/ContactDetail";
+import Organizations from "./pages/Organizations/Organizations";
 import Leads from "./pages/Leads/Leads";
 import Pipeline from "./pages/Pipeline/Pipeline";
 import Activity from "./pages/Activity/Activity";
@@ -20,6 +21,7 @@ const App = () => {
       <Route path="/" element={<Dashboad />} />
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/contacts/:id" element={<ContactDetail />} />
+      <Route path="/organizations" element={<Organizations />} />
       <Route path="/leads" element={<Leads />} />
       <Route path="/pipeline" element={<Pipeline />} />
       <Route path="/activity" element={<Activity />} />
