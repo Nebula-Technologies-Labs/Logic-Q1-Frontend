@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
 
     ports:
-      - "3211"
+      - "127.0.0.1:3211:3211"
 
     networks:
       - logicq1-network
