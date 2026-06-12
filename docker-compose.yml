@@ -1,0 +1,23 @@
+services:
+  crm-frontend:
+    container_name: crm-frontend
+
+    build:
+      context: .
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+
+    env_file:
+      - .env
+
+    restart: unless-stopped
+
+    ports:
+      - "3006:80"
+
+    networks:
+      - logicq1-network
+
+networks:
+  logicq1-network:
+    external: true
