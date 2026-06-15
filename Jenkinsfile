@@ -160,6 +160,8 @@ ${env.BUILD_URL}
 Branch: ${env.BRANCH_NAME}
 Author: ${env.GIT_AUTHOR}
 
+🌐 https://crm.logiq1.com
+
 ${env.BUILD_URL}
 """
 
