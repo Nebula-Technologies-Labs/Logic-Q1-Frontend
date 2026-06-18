@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboad = () => {
   const navigate = useNavigate();
-  const [authenticated, setAuthenticated] = useState(localStorage.getItem("token") ? true : false);
+  const [authenticated] = useState(localStorage.getItem("token") ? true : false);
 
   useEffect(() => {
     if (!authenticated) {
