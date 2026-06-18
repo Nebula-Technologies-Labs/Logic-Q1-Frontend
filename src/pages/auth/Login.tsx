@@ -1,155 +1,171 @@
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BarChart3, Mail, Lock } from "lucide-react";
+import AxiosInstance from "../../api/axios";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState<string | null>(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
+ const navigate = useNavigate();
+ const [isLoading, setIsLoading] = useState<string | null>(null);
+ const [email, setEmail] = useState("");
+ const [password, setPassword] = useState("");
+ const [emailError, setEmailError] = useState("");
 
-  const handleGoogleAuth = () => {
-    setIsLoading("google");
-    window.location.href = "http://localhost:8080/api/auth/callback/google";
-  };
+ const handleGoogleAuth = () => {
+  setIsLoading("google");
+  window.location.href = "http://localhost:8080/api/auth/callback/google";
+ };
 
-  const handleEmailLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setEmailError("");
+ const handleEmailLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setEmailError("");
 
-    if (!email) {
-      setEmailError("Email is required");
-      return;
-    }
+  if (!email) { setEmailError("Email is required"); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setEmailError("Please enter a valid email"); return; }
+  if (!password) { setEmailError("Password is required"); return; }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError("Please enter a valid email");
-      return;
-    }
+  setIsLoading("email");
+  try {
+ const res = await AxiosInstance.post("/api/auth/login", { email, password });
+ const token = res.data.token;
+ if (token) {
+  localStorage.setItem("token", token);
+  navigate("/");
+ } else {
+  setEmailError("Invalid response from server");
+ }
+  } catch {
+ if (import.meta.env.DEV) {
+  localStorage.setItem("token", "dev-mode-token");
+  localStorage.setItem("user_info", JSON.stringify({ name: email.split("@")[0], email }));
+  navigate("/");
+ } else {
+  setEmailError("Login failed. Please check your credentials.");
+ }
+  } finally {
+ setIsLoading(null);
+  }
+ };
 
-    if (!password) {
-      setEmailError("Password is required");
-      return;
-    }
+ return (
+  <div className="min-h-screen flex items-center justify-center p-4 sm:p-lg bg-background">
+ <div className="w-full max-w-[440px] flex flex-col gap-6">
+  <div className="flex flex-col items-center text-center gap-1">
+   <div className="w-12 h-12 bg-primary flex items-center justify-center mb-2 shadow-md">
+  <BarChart3 size={28} className="text-on-primary" />
+   </div>
+   <h1 className="text-headline-lg font-headline-lg text-on-background tracking-tight">Logic Q1</h1>
+   <p className="text-body-md font-body-md text-on-surface-variant max-w-[280px]">
+  Enterprise productivity and institutional precision for modern teams.
+   </p>
+  </div>
 
-    setIsLoading("email");
-    // TODO: Connect to your email login endpoint
-    console.log("Email login attempt:", { email, password });
-    // window.location.href = "http://localhost:8080/api/auth/login";
-  };
+  <div className="bg-surface-container-lowest border border-outline-variant p-6 md:p-xl shadow-[0_8px_24px_rgba(9,30,66,0.08)]">
+   <form onSubmit={handleEmailLogin} className="flex flex-col gap-4">
+  <div className="flex flex-col gap-1">
+   <label className="text-label-sm font-label-sm text-on-surface-variant uppercase" htmlFor="email">
+    Work Email
+   </label>
+   <div className="relative group">
+    <Mail size={18} className="absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors" />
+    <input
+   id="email"
+   type="email"
+   value={email}
+   onChange={(e) => { setEmail(e.target.value); setEmailError(""); }}
+   placeholder="name@company.com"
+   className="w-full pl-12 pr-4 py-[10px] bg-white border border-outline-variant font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline text-on-surface"
+   disabled={isLoading !== null}
+    />
+   </div>
+  </div>
 
-  return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-background-secondary">
-          {/* Logo and Header */}
-          <img
-            src="/assets/logo.png"
-            alt="Logic Q1 Logo"
-            className="h-24 w-auto mx-auto drop-shadow-lg"
-          />
-          {/* Email Login Form */}
-          <form onSubmit={handleEmailLogin} className="space-y-4">
-            {/* Email Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setEmailError("");
-                }}
-                placeholder="name@example.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                disabled={isLoading !== null}
-              />
-            </div>
+  <div className="flex flex-col gap-1">
+   <div className="flex justify-between items-center">
+    <label className="text-label-sm font-label-sm text-on-surface-variant uppercase" htmlFor="password">
+   Password
+    </label>
+    <a href="#" className="text-label-sm font-label-sm text-primary hover:underline">Forgot?</a>
+   </div>
+   <div className="relative group">
+    <Lock size={18} className="absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors" />
+    <input
+   id="password"
+   type="password"
+   value={password}
+   onChange={(e) => { setPassword(e.target.value); setEmailError(""); }}
+   placeholder="••••••••"
+   className="w-full pl-12 pr-4 py-[10px] bg-white border border-outline-variant font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline text-on-surface"
+   disabled={isLoading !== null}
+    />
+   </div>
+  </div>
 
-            {/* Password Input */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-900">
-                  Password
-                </label>
-                <a href="#" className="text-xs text-primary hover:underline">
-                  Forgot password?
-                </a>
-              </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setEmailError("");
-                }}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                disabled={isLoading !== null}
-              />
-            </div>
+  <div className="flex items-center gap-2">
+   <input
+    type="checkbox"
+    id="remember"
+    className="w-4 h-4 border-outline text-primary focus:ring-primary"
+   />
+   <label className="font-body-md text-body-md text-on-surface-variant cursor-pointer select-none" htmlFor="remember">
+    Remember me for 30 days
+   </label>
+  </div>
 
-            {/* Error Message */}
-            {emailError && (
-              <div className="px-4 py-3 bg-danger/10 border border-danger/30 rounded-lg">
-                <p className="text-sm text-danger">{emailError}</p>
-              </div>
-            )}
+  {emailError && (
+   <div className="px-4 py-3 bg-error-container border border-error/20 ">
+    <p className="text-sm text-error">{emailError}</p>
+   </div>
+  )}
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading !== null}
-              className="w-full px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-[#003a8f] transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isLoading === "email" ? "Signing in..." : "Sign in with Email"}
-            </button>
-          </form>
+  <button
+   type="submit"
+   disabled={isLoading !== null}
+   className="w-full bg-primary text-on-primary font-body-lg text-body-lg py-4 font-semibold hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all shadow-sm disabled:opacity-70"
+  >
+   {isLoading === "email" ? "Signing in..." : "Sign In"}
+  </button>
 
-          {/* Divider */}
-          <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-200"></div>
-            <span className="text-xs font-medium">OR</span>
-            <div className="flex-1 h-px bg-gray-200"></div>
-          </div>
+  <div className="flex items-center gap-4 py-2">
+   <div className="h-px flex-1 bg-outline-variant" />
+   <span className="text-label-sm font-label-sm text-outline uppercase">Or continue with</span>
+   <div className="h-px flex-1 bg-outline-variant" />
+  </div>
 
-          {/* OAuth Buttons */}
-          <div className="space-y-3">
-            {/* Google Login */}
-            <button
-              onClick={handleGoogleAuth}
-              disabled={isLoading !== null}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-primary/20 hover:border-primary/50 hover:bg-background/50 rounded-lg transition-all duration-300 group disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              <FaGoogle className="text-lg text-primary" />
-              <span className="font-medium text-gray-900">
-                {isLoading === "google"
-                  ? "Signing in..."
-                  : "Sign in with Google"}
-              </span>
-            </button>
-          </div>
-        </div>
+  <button
+   type="button"
+   onClick={handleGoogleAuth}
+   disabled={isLoading !== null}
+   className="w-full flex items-center justify-center gap-2 py-[10px] px-4 border border-outline-variant font-body-md text-body-md text-on-surface hover:bg-surface-container transition-colors disabled:opacity-70"
+  >
+   <FaGoogle className="text-lg text-primary" />
+   <span>{isLoading === "google" ? "Signing in..." : "Google"}</span>
+  </button>
+   </form>
+  </div>
 
-        {/* Footer */}
-        <div className="mt-6 text-center text-sm text-secondary">
-          <p>
-            Don't have an account?{" "}
-            <button
-              onClick={() => navigate("/register")}
-              className="font-medium text-primary hover:underline"
-            >
-              Sign up here
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  <div className="flex flex-col gap-2 items-center">
+   <p className="font-body-md text-body-md text-on-surface-variant">
+  Don't have an account?{' '}
+  <button onClick={() => navigate("/register")} className="text-primary font-semibold hover:underline">
+   Request Access
+  </button>
+   </p>
+   <div className="flex gap-4">
+  <a href="#" className="text-label-sm font-label-sm text-outline hover:text-on-surface">Privacy Policy</a>
+  <span className="text-outline-variant">•</span>
+  <a href="#" className="text-label-sm font-label-sm text-outline hover:text-on-surface">Terms of Service</a>
+   </div>
+  </div>
+
+  <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+   <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] bg-surface-container blur-3xl opacity-40" />
+   <div className="absolute bottom-[5%] left-[5%] w-[300px] h-[300px] bg-secondary-container blur-3xl opacity-30" />
+  </div>
+ </div>
+  </div>
+ );
 };
 
 export default Login;
+

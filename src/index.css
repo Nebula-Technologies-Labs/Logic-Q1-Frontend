@@ -1,10 +1,158 @@
 @import "tailwindcss";
 
-@theme{
-    --color-background: #F3F4FF;
-    --color-primary: #004aad;
-    --color-secondary: #6B778C;
-    --color-background-secondary: #F1F3FF;
-    --color-danger: #D2411A;
-    --color-success: #2E814A;
+@theme {
+  --color-background: #ffffff;
+  --color-on-background: #000000;
+  --color-surface: #ffffff;
+  --color-surface-dim: #e5e5e5;
+  --color-surface-bright: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f5f5;
+  --color-surface-container: #ebebeb;
+  --color-surface-container-high: #e0e0e0;
+  --color-surface-container-highest: #d4d4d4;
+  --color-on-surface: #000000;
+  --color-on-surface-variant: #555555;
+  --color-inverse-surface: #333333;
+  --color-inverse-on-surface: #f0f0f0;
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #333333;
+  --color-on-primary-container: #cccccc;
+  --color-primary-fixed: #e0e0e0;
+  --color-primary-fixed-dim: #b3b3b3;
+  --color-on-primary-fixed: #000000;
+  --color-on-primary-fixed-variant: #1a1a1a;
+  --color-inverse-primary: #b3b3b3;
+  --color-secondary: #555555;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #e0e0e0;
+  --color-on-secondary-container: #555555;
+  --color-secondary-fixed: #e5e5e5;
+  --color-secondary-fixed-dim: #cccccc;
+  --color-on-secondary-fixed: #1a1a1a;
+  --color-on-secondary-fixed-variant: #444444;
+  --color-tertiary: #444444;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #666666;
+  --color-on-tertiary-container: #cccccc;
+  --color-tertiary-fixed: #d9d9d9;
+  --color-tertiary-fixed-dim: #b0b0b0;
+  --color-on-tertiary-fixed: #000000;
+  --color-on-tertiary-fixed-variant: #333333;
+  --color-error: #cc0000;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffe5e5;
+  --color-on-error-container: #990000;
+  --color-outline: #999999;
+  --color-outline-variant: #d4d4d4;
+  --color-surface-tint: #666666;
+  --color-surface-variant: #ebebeb;
+
+  --font-family-display-lg: "IBM Plex Sans", sans-serif;
+  --font-family-headline-lg: "IBM Plex Sans", sans-serif;
+  --font-family-title-md: "IBM Plex Sans", sans-serif;
+  --font-family-body-lg: "Inter", sans-serif;
+  --font-family-body-md: "Inter", sans-serif;
+  --font-family-label-sm: "JetBrains Mono", monospace;
+
+  --font-size-display-lg: 48px;
+  --font-size-headline-lg: 32px;
+  --font-size-headline-lg-mobile: 24px;
+  --font-size-headline-md: 24px;
+  --font-size-headline-sm: 20px;
+  --font-size-title-md: 20px;
+  --font-size-body-lg: 16px;
+  --font-size-body-md: 14px;
+  --font-size-label-sm: 12px;
+
+  --line-height-display-lg: 56px;
+  --line-height-headline-lg: 40px;
+  --line-height-headline-lg-mobile: 32px;
+  --line-height-headline-md: 32px;
+  --line-height-headline-sm: 28px;
+  --line-height-title-md: 28px;
+  --line-height-body-lg: 24px;
+  --line-height-body-md: 20px;
+  --line-height-label-sm: 16px;
+
+  --letter-spacing-display-lg: -0.02em;
+  --letter-spacing-headline-lg: -0.01em;
+  --letter-spacing-label-sm: 0.05em;
+
+  --font-weight-display-lg: 600;
+  --font-weight-headline-lg: 600;
+  --font-weight-title-md: 500;
+  --font-weight-body-lg: 400;
+  --font-weight-body-md: 400;
+  --font-weight-label-sm: 500;
+
+  --radius-none: 0;
+
+  --spacing-base: 4px;
+}
+
+:root {
+  --chart-grid: #e5e7eb;
+  --chart-tooltip-bg: #ffffff;
+  --chart-tooltip-border: #e5e7eb;
+  --chart-tooltip-text: #111827;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #999999;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+::selection {
+  background-color: #000000;
+  color: white;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.kanban-column {
+  min-width: 320px;
+  max-width: 320px;
+}
+
+.deal-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(9, 30, 66, 0.08);
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.25s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
 }
