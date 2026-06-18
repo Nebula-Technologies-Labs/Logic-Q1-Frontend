@@ -11,7 +11,7 @@ const Login = () => {
 
   const handleGoogleAuth = () => {
     setIsLoading("google");
-    window.location.href = "http://localhost:8080/api/auth/callback/google";
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/callback/google`;
   };
 
   const handleEmailLogin = (e: React.FormEvent) => {
