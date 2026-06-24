@@ -1,10 +1,16 @@
-import {configureStore} from '@reduxjs/toolkit'
+import {
+    configureStore,
+} from "@reduxjs/toolkit";
 
-const  Store = configureStore({
-    reducer: {},
-})
+const store =
+    configureStore({
 
-export type RootState = ReturnType<typeof Store.getState>
-export type AppDispatch = typeof Store.dispatch
+        reducer: {},
 
-export default Store;
+    });
+
+export type AppStore = typeof store;
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
+
+export default store;

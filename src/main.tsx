@@ -1,17 +1,17 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
-import { Provider } from "react-redux";
-import store from "./store/Store.tsx";
-import { BrowserRouter } from "react-router-dom";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
-  </StrictMode>,
+import App from "./app/App";
+import AppProviders from "./app/providers";
+import "./index.css";
+
+createRoot(
+    document.getElementById("root")!
+).render(
+    <StrictMode>
+        <AppProviders>
+            <App />
+        </AppProviders>
+    </StrictMode>
+
 );
