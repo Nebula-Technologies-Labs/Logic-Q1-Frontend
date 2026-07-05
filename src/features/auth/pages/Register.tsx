@@ -27,7 +27,7 @@ import {
 import {
     validateRegister,
     type RegistrationForm,
-} from "../../../utils/validators/register.validators";
+} from "../validators/register.validator";
 
 const Register = () => {
 
