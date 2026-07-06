@@ -18,14 +18,9 @@ import {
     useNavigate,
 } from "react-router-dom";
 
-import {
-    useAuth,
-} from "../hooks";
-
-import {
-    emailLogin,
-    startGoogleOAuth,
-} from "../api";
+import { useAuth } from "../hooks";
+import { emailLogin, startGoogleOAuth } from "../api";
+import { validateLogin } from "../validators/login.validator";
 
 type LocationState = {
     from?: {
@@ -42,10 +37,10 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [submitting, setSubmitting] = useState<"email" | "google" | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const emailLoginHandler = async (): Promise<boolean> => {
-        setError(null);
+        setErrors({});
         setSubmitting("email");
 
         try {
@@ -55,15 +50,17 @@ const Login = () => {
             });
 
             if (!token) {
-                setError("Authentication token was not returned by the server.");
+                setErrors({ form: "Authentication token was not returned by the server." });
                 return false;
             }
 
             await login(token);
             return true;
         } catch (cause) {
-            const message = cause instanceof Error ? cause.message : "Sign in failed. Please check your credentials and try again.";
-            setError(message);
+            const message = cause instanceof Error
+                ? cause.message
+                : "Sign in failed. Please check your credentials and try again.";
+            setErrors({ form: message });
             return false;
         } finally {
             setSubmitting(null);
@@ -72,6 +69,12 @@ const Login = () => {
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const validationErrors = validateLogin(email, password);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
 
         const success = await emailLoginHandler();
         if (success) {
@@ -105,11 +108,17 @@ const Login = () => {
                                     autoComplete="email"
                                     placeholder="name@example.com"
                                     value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
+                                    onChange={(event) => {
+                                        setEmail(event.target.value);
+                                        if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                                    }}
                                     disabled={submitting !== null}
                                     className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all"
                                 />
                             </div>
+                            {errors.email && (
+                                <p className="mt-1 text-xs text-red-600">{errors.email}</p>
+                            )}
                         </div>
 
                         <div>
@@ -124,18 +133,24 @@ const Login = () => {
                                     autoComplete="current-password"
                                     placeholder="••••••••"
                                     value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
+                                    onChange={(event) => {
+                                        setPassword(event.target.value);
+                                        if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
+                                    }}
                                     disabled={submitting !== null}
                                     className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all"
                                 />
                             </div>
+                            {errors.password && (
+                                <p className="mt-1 text-xs text-red-600">{errors.password}</p>
+                            )}
                         </div>
 
-                        {error ? (
+                        {errors.form && (
                             <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 text-sm">
-                                {error}
+                                {errors.form}
                             </div>
-                        ) : null}
+                        )}
 
                         <button
                             type="submit"

@@ -9,11 +9,14 @@ import {
 } from "react";
 
 import { fetchCurrentUser } from "./api/auth.service";
-import { storage } from "../../utils/storage";
+import { storage } from "@/utils/storage";
+import { isTokenExpired } from "@/utils/auth.utils";
+import type { AuthUser } from "./types/auth.types";
 
 export type AuthContextType = {
     loading: boolean;
     authenticated: boolean;
+    user: AuthUser | null;
     initialize: () => Promise<void>;
     login: (token: string) => Promise<void>;
     logout: () => void;
@@ -22,26 +25,27 @@ export type AuthContextType = {
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-let initializationPromise: Promise<boolean> | null = null;
-let initializationResult: boolean | null = null;
+let initializationPromise: Promise<{ authenticated: boolean; user: AuthUser | null }> | null = null;
+let initializationResult: { authenticated: boolean; user: AuthUser | null } | null = null;
 
-const validateStoredSession = async (): Promise<boolean> => {
+const validateStoredSession = async (): Promise<{ authenticated: boolean; user: AuthUser | null }> => {
     const token = storage.getToken();
 
-    if (!token) {
-        return false;
+    if (!token || isTokenExpired(token)) {
+        storage.clear();
+        return { authenticated: false, user: null };
     }
 
     try {
-        await fetchCurrentUser();
-        return true;
+        const user = await fetchCurrentUser();
+        return { authenticated: true, user };
     } catch {
         storage.clear();
-        return false;
+        return { authenticated: false, user: null };
     }
 };
 
-const runInitializeOnce = async (): Promise<boolean> => {
+const runInitializeOnce = async (): Promise<{ authenticated: boolean; user: AuthUser | null }> => {
     if (initializationResult !== null) {
         return initializationResult;
     }
@@ -67,6 +71,7 @@ export const AuthProvider = ({
 }) => {
     const [loading, setLoading] = useState(true);
     const [authenticated, setAuthenticated] = useState(false);
+    const [user, setUser] = useState<AuthUser | null>(null);
     const isMountedRef = useRef(true);
 
     useEffect(() => {
@@ -81,32 +86,46 @@ export const AuthProvider = ({
             setLoading(true);
         }
 
-        const isAuthenticated = await runInitializeOnce();
+        const result = await runInitializeOnce();
 
         if (!isMountedRef.current) {
             return;
         }
 
-        setAuthenticated(isAuthenticated);
+        setAuthenticated(result.authenticated);
+        setUser(result.user);
         setLoading(false);
     }, []);
 
     const login = useCallback(async (token: string): Promise<void> => {
         storage.setToken(token);
-        initializationResult = true;
 
-        if (isMountedRef.current) {
-            setAuthenticated(true);
-            setLoading(false);
+        try {
+            const fetchedUser = await fetchCurrentUser();
+            initializationResult = { authenticated: true, user: fetchedUser };
+
+            if (isMountedRef.current) {
+                setUser(fetchedUser);
+                setAuthenticated(true);
+                setLoading(false);
+            }
+        } catch {
+            initializationResult = { authenticated: true, user: null };
+
+            if (isMountedRef.current) {
+                setAuthenticated(true);
+                setLoading(false);
+            }
         }
     }, []);
 
     const logout = useCallback((): void => {
         storage.clear();
-        initializationResult = false;
+        initializationResult = { authenticated: false, user: null };
 
         if (isMountedRef.current) {
             setAuthenticated(false);
+            setUser(null);
             setLoading(false);
         }
     }, []);
@@ -130,13 +149,15 @@ export const AuthProvider = ({
         () => ({
             loading,
             authenticated,
+            user,
             initialize,
             login,
             logout,
         }),
-        [loading, authenticated, initialize, login, logout]
+        [loading, authenticated, user, initialize, login, logout]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
 

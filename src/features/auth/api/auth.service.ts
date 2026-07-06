@@ -1,5 +1,5 @@
-import api from "../../../lib/axios";
-import { env } from "../../../config/env";
+import api from "@/lib/axios";
+import { env } from "@/config/env";
 
 import type {
     LoginRequest,
@@ -44,7 +44,7 @@ export const resolveGoogleLoginUrl = (): string => {
         return configuredUrl;
     }
 
-    const apiBaseUrl = env.apiUrl?.trim();
+    const apiBaseUrl = env.apiBaseUrl?.trim();
 
     if (apiBaseUrl) {
         return new URL(GOOGLE_OAUTH_FALLBACK_PATH, apiBaseUrl).toString();
