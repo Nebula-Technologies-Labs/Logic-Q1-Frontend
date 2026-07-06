@@ -1,32 +1,15 @@
-import {
-    useState,
-    type FormEvent,
-} from "react";
+import { useState, type FormEvent } from "react";
 import { isAxiosError } from "axios";
 
-import {
-    FaGoogle,
-} from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
-import {
-    FiEye,
-    FiEyeOff,
-} from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
-import {
-    Link,
-    useLocation,
-    useNavigate,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import {
-    useAuth,
-} from "../hooks";
-
-import {
-    emailLogin,
-    startGoogleOAuth,
-} from "../api";
+import { useAuth } from "../hooks";
+import { emailLogin, startGoogleOAuth } from "../api";
+import { validateLogin } from "../validators/login.validator";
 
 type LocationState = {
     from?: {
@@ -44,10 +27,10 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [submitting, setSubmitting] = useState<"email" | "google" | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const emailLoginHandler = async (): Promise<boolean> => {
-        setError(null);
+        setErrors({});
         setSubmitting("email");
 
         try {
@@ -57,7 +40,7 @@ const Login = () => {
             });
 
             if (!token) {
-                setError("Authentication token was not returned by the server.");
+                setErrors({ form: "Authentication token was not returned by the server." });
                 return false;
             }
 
@@ -70,7 +53,7 @@ const Login = () => {
             } else if (cause instanceof Error) {
                 message = cause.message;
             }
-            setError(message);
+            setErrors({ form: message });
             return false;
         } finally {
             setSubmitting(null);
@@ -79,6 +62,12 @@ const Login = () => {
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const validationErrors = validateLogin(email, password);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
 
         const success = await emailLoginHandler();
         if (success) {
@@ -100,12 +89,20 @@ const Login = () => {
             <div className="w-full max-w-[440px] z-10">
                 <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 sm:p-10 border border-[#C4D5F1] transition-all duration-300">
                     <div className="text-center mb-8">
-                        <img src="/assets/logo.png" alt="LogicQ1" className="h-10 mx-auto mb-5 object-contain" />
+                        <img
+                            src="/assets/logo.png"
+                            alt="LogicQ1"
+                            className="h-10 mx-auto mb-5 object-contain"
+                        />
                         <div className="inline-flex items-center justify-center px-3 py-1 mb-5 text-[11px] font-semibold tracking-widest text-[#334056] uppercase bg-[#F0F5FE] border border-[#C4D5F1] rounded-full">
                             CRM Workspace
                         </div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-[#0D1625] tracking-tight">Welcome Back</h1>
-                        <p className="text-[#334056] text-sm mt-2">Sign in to continue to your workspace</p>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-[#0D1625] tracking-tight">
+                            Welcome Back
+                        </h1>
+                        <p className="text-[#334056] text-sm mt-2">
+                            Sign in to continue to your workspace
+                        </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -115,7 +112,10 @@ const Login = () => {
                                 type="email"
                                 autoComplete="email"
                                 value={email}
-                                onChange={(event) => setEmail(event.target.value)}
+                                onChange={(event) => {
+                                    setEmail(event.target.value);
+                                    if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                                }}
                                 disabled={submitting !== null}
                                 className="block w-full h-[44px] px-3.5 pt-4 pb-1 text-[14px] text-[#0D1625] bg-transparent border border-[#C4D5F1] rounded-[12px] appearance-none focus:outline-none focus:border-[#1E293B] focus:shadow-[0_4px_14px_rgba(0,0,0,0.05)] peer transition-all duration-300"
                                 placeholder=" "
@@ -127,6 +127,9 @@ const Login = () => {
                             >
                                 Email
                             </label>
+                            {errors.email && (
+                                <p className="mt-1 text-xs text-red-600">{errors.email}</p>
+                            )}
                         </div>
 
                         <div className="relative group">
@@ -135,7 +138,11 @@ const Login = () => {
                                 type={showPassword ? "text" : "password"}
                                 autoComplete="current-password"
                                 value={password}
-                                onChange={(event) => setPassword(event.target.value)}
+                                onChange={(event) => {
+                                    setPassword(event.target.value);
+                                    if (errors.password)
+                                        setErrors((prev) => ({ ...prev, password: "" }));
+                                }}
                                 disabled={submitting !== null}
                                 className="block w-full h-[44px] pl-3.5 pr-10 pt-4 pb-1 text-[14px] text-[#0D1625] bg-transparent border border-[#C4D5F1] rounded-[12px] appearance-none focus:outline-none focus:border-[#1E293B] focus:shadow-[0_4px_14px_rgba(0,0,0,0.05)] peer transition-all duration-300"
                                 placeholder=" "
@@ -152,18 +159,28 @@ const Login = () => {
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute cursor-pointer right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#1E293B] transition-colors focus:outline-none"
                             >
-                                {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                                {showPassword ? (
+                                    <FiEyeOff className="w-4 h-4" />
+                                ) : (
+                                    <FiEye className="w-4 h-4" />
+                                )}
                             </button>
+                            {errors.password && (
+                                <p className="mt-1 text-xs text-red-600">{errors.password}</p>
+                            )}
                         </div>
 
-                        {error ? (
+                        {errors.form && (
                             <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 text-sm transition-all duration-300">
-                                {error}
+                                {errors.form}
                             </div>
-                        ) : null}
+                        )}
 
                         <div className="flex justify-end pt-1 pb-2">
-                            <Link to="/forgot-password" className="text-sm font-medium text-[#334056] hover:text-[#1E293B] transition-colors duration-200">
+                            <Link
+                                to="/forgot-password"
+                                className="text-sm font-medium text-[#334056] hover:text-[#1E293B] transition-colors duration-200"
+                            >
                                 Forgot password?
                             </Link>
                         </div>
@@ -176,7 +193,9 @@ const Login = () => {
                             <span className="flex items-center justify-center gap-2">
                                 {submitting === "email" ? "Signing in..." : "Sign In"}
                                 {submitting !== "email" && (
-                                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                        →
+                                    </span>
                                 )}
                             </span>
                         </button>
@@ -187,7 +206,9 @@ const Login = () => {
                             <div className="w-full border-t border-[#C4D5F1]"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-4 bg-white text-[#334056] text-xs font-medium uppercase tracking-wider">Or</span>
+                            <span className="px-4 bg-white text-[#334056] text-xs font-medium uppercase tracking-wider">
+                                Or
+                            </span>
                         </div>
                     </div>
 
@@ -204,9 +225,14 @@ const Login = () => {
 
                 <div className="mt-8 text-center text-[14px] text-[#334056]">
                     Don't have an account?{" "}
-                    <Link to="/register" className="font-semibold text-[#1E293B] hover:text-[#0D1625] transition-colors group inline-flex items-center">
+                    <Link
+                        to="/register"
+                        className="font-semibold text-[#1E293B] hover:text-[#0D1625] transition-colors group inline-flex items-center"
+                    >
                         Create Account
-                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1 ml-1">→</span>
+                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1 ml-1">
+                            →
+                        </span>
                     </Link>
                 </div>
             </div>
@@ -215,4 +241,3 @@ const Login = () => {
 };
 
 export default Login;
-

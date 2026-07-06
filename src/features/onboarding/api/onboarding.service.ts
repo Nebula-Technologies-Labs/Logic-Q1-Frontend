@@ -6,12 +6,9 @@ import type {
 } from "../types/onboarding.types";
 
 export const createOrganization = async (
-    payload: CreateOrganizationRequest
+    payload: CreateOrganizationRequest,
 ): Promise<CreateOrganizationResponse> => {
-    const { data } = await api.post<CreateOrganizationResponse>(
-        "/organization/create",
-        payload
-    );
+    const { data } = await api.post<CreateOrganizationResponse>("/organization/create", payload);
 
     return data;
 };

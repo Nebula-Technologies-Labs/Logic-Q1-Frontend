@@ -1,8 +1,4 @@
-import {
-    useState,
-    useCallback,
-    type FormEvent,
-} from "react";
+import { useState, useCallback, type FormEvent } from "react";
 
 import { isAxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
@@ -33,19 +29,16 @@ const Onboarding = () => {
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
-    const updateField = useCallback(
-        (field: keyof CreateOrganizationRequest, value: string) => {
-            setForm((prev) => ({ ...prev, [field]: value }));
-            setFieldErrors((prev) => {
-                if (!prev[field]) return prev;
-                const next = { ...prev };
-                delete next[field];
-                return next;
-            });
-            setApiError(null);
-        },
-        []
-    );
+    const updateField = useCallback((field: keyof CreateOrganizationRequest, value: string) => {
+        setForm((prev) => ({ ...prev, [field]: value }));
+        setFieldErrors((prev) => {
+            if (!prev[field]) return prev;
+            const next = { ...prev };
+            delete next[field];
+            return next;
+        });
+        setApiError(null);
+    }, []);
 
     const validate = useCallback((): boolean => {
         const errors: FieldErrors = {};
@@ -92,9 +85,7 @@ const Onboarding = () => {
                 name: form.name.trim(),
                 category: form.category.trim(),
                 country: form.country.trim(),
-                websiteUrl: websiteUrl.match(/^https?:\/\//)
-                    ? websiteUrl
-                    : `https://${websiteUrl}`,
+                websiteUrl: websiteUrl.match(/^https?:\/\//) ? websiteUrl : `https://${websiteUrl}`,
             };
 
             await createOrganization(payload);
@@ -141,9 +132,7 @@ const Onboarding = () => {
                                 <polyline points="20 6 9 17 4 12" />
                             </svg>
                         </div>
-                        <h2 className="onboarding-success-title">
-                            You're all set!
-                        </h2>
+                        <h2 className="onboarding-success-title">You're all set!</h2>
                         <p className="onboarding-success-text">
                             Your organization has been created successfully.
                             <br />
@@ -163,19 +152,11 @@ const Onboarding = () => {
             <div className="onboarding-card">
                 {/* Header */}
                 <div className="onboarding-header">
-                    <img
-                        src="/assets/logo.png"
-                        alt="LogicQ1"
-                        className="onboarding-logo"
-                    />
+                    <img src="/assets/logo.png" alt="LogicQ1" className="onboarding-logo" />
                     <div className="onboarding-badge">Setup</div>
-                    <h1 className="onboarding-title">
-                        Set Up Your Organization
-                    </h1>
+                    <h1 className="onboarding-title">Set Up Your Organization</h1>
                     <p className="onboarding-subtitle">
-                        {user?.firstName
-                            ? `Welcome, ${user.firstName}! `
-                            : ""}
+                        {user?.firstName ? `Welcome, ${user.firstName}! ` : ""}
                         Let's get your workspace ready in just a few steps.
                     </p>
                 </div>
@@ -201,9 +182,7 @@ const Onboarding = () => {
                             className={`onboarding-input${fieldErrors.name ? " has-error" : ""}`}
                             placeholder=" "
                             value={form.name}
-                            onChange={(e) =>
-                                updateField("name", e.target.value)
-                            }
+                            onChange={(e) => updateField("name", e.target.value)}
                             disabled={submitting}
                             autoFocus
                         />
@@ -211,9 +190,7 @@ const Onboarding = () => {
                             Organization Name
                         </label>
                         {fieldErrors.name && (
-                            <div className="onboarding-field-error">
-                                {fieldErrors.name}
-                            </div>
+                            <div className="onboarding-field-error">{fieldErrors.name}</div>
                         )}
                     </div>
 
@@ -225,24 +202,17 @@ const Onboarding = () => {
                             className={`onboarding-input${fieldErrors.category ? " has-error" : ""}`}
                             placeholder=" "
                             value={form.category}
-                            onChange={(e) =>
-                                updateField("category", e.target.value)
-                            }
+                            onChange={(e) => updateField("category", e.target.value)}
                             disabled={submitting}
                         />
-                        <label
-                            htmlFor="org-category"
-                            className="onboarding-label"
-                        >
+                        <label htmlFor="org-category" className="onboarding-label">
                             Category
                         </label>
                         <div className="onboarding-helper">
                             e.g. Technology, Finance, Healthcare, Education
                         </div>
                         {fieldErrors.category && (
-                            <div className="onboarding-field-error">
-                                {fieldErrors.category}
-                            </div>
+                            <div className="onboarding-field-error">{fieldErrors.category}</div>
                         )}
                     </div>
 
@@ -254,21 +224,14 @@ const Onboarding = () => {
                             className={`onboarding-input${fieldErrors.country ? " has-error" : ""}`}
                             placeholder=" "
                             value={form.country}
-                            onChange={(e) =>
-                                updateField("country", e.target.value)
-                            }
+                            onChange={(e) => updateField("country", e.target.value)}
                             disabled={submitting}
                         />
-                        <label
-                            htmlFor="org-country"
-                            className="onboarding-label"
-                        >
+                        <label htmlFor="org-country" className="onboarding-label">
                             Country
                         </label>
                         {fieldErrors.country && (
-                            <div className="onboarding-field-error">
-                                {fieldErrors.country}
-                            </div>
+                            <div className="onboarding-field-error">{fieldErrors.country}</div>
                         )}
                     </div>
 
@@ -280,37 +243,22 @@ const Onboarding = () => {
                             className={`onboarding-input${fieldErrors.websiteUrl ? " has-error" : ""}`}
                             placeholder=" "
                             value={form.websiteUrl}
-                            onChange={(e) =>
-                                updateField("websiteUrl", e.target.value)
-                            }
+                            onChange={(e) => updateField("websiteUrl", e.target.value)}
                             disabled={submitting}
                         />
-                        <label
-                            htmlFor="org-website"
-                            className="onboarding-label"
-                        >
+                        <label htmlFor="org-website" className="onboarding-label">
                             Website URL
                         </label>
                         {fieldErrors.websiteUrl && (
-                            <div className="onboarding-field-error">
-                                {fieldErrors.websiteUrl}
-                            </div>
+                            <div className="onboarding-field-error">{fieldErrors.websiteUrl}</div>
                         )}
                     </div>
 
                     {/* API Error */}
-                    {apiError && (
-                        <div className="onboarding-error-banner">
-                            {apiError}
-                        </div>
-                    )}
+                    {apiError && <div className="onboarding-error-banner">{apiError}</div>}
 
                     {/* Submit */}
-                    <button
-                        type="submit"
-                        className="onboarding-submit"
-                        disabled={submitting}
-                    >
+                    <button type="submit" className="onboarding-submit" disabled={submitting}>
                         {submitting ? (
                             <>
                                 <span className="onboarding-spinner" />

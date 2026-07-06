@@ -1,32 +1,18 @@
-import api from "../../../lib/axios";
-import { env } from "../../../config/env";
+import api from "@/lib/axios";
+import { env } from "@/config/env";
 
-import type {
-    LoginRequest,
-    AuthResponse,
-    RegisterRequest,
-} from "../types/auth.types";
+import type { LoginRequest, AuthResponse, RegisterRequest } from "../types/auth.types";
 
 const GOOGLE_OAUTH_FALLBACK_PATH = "/oauth2/authorization/google";
 
-export const emailLogin = async (
-    payload: LoginRequest
-): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>(
-        "/auth/login",
-        payload
-    );
+export const emailLogin = async (payload: LoginRequest): Promise<AuthResponse> => {
+    const { data } = await api.post<AuthResponse>("/auth/login", payload);
 
     return data;
 };
 
-export const register = async (
-    payload: RegisterRequest
-): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>(
-        "/auth/register",
-        payload
-    );
+export const register = async (payload: RegisterRequest): Promise<AuthResponse> => {
+    const { data } = await api.post<AuthResponse>("/auth/register", payload);
 
     return data;
 };
@@ -42,9 +28,7 @@ export interface ForgotPasswordResponse {
     token?: string;
 }
 
-export const sendPasswordResetOTP = async (
-    email: string,
-): Promise<ForgotPasswordResponse> => {
+export const sendPasswordResetOTP = async (email: string): Promise<ForgotPasswordResponse> => {
     const { data } = await api.post<ForgotPasswordResponse>(
         `/auth/forgotPassword/verifyMail/${encodeURIComponent(email)}`,
     );
@@ -82,7 +66,7 @@ export const resolveGoogleLoginUrl = (): string => {
         return configuredUrl;
     }
 
-    const apiBaseUrl = env.apiUrl?.trim();
+    const apiBaseUrl = env.apiBaseUrl?.trim();
 
     if (apiBaseUrl) {
         return new URL(GOOGLE_OAUTH_FALLBACK_PATH, apiBaseUrl).toString();
@@ -92,9 +76,7 @@ export const resolveGoogleLoginUrl = (): string => {
 };
 
 export const completeGoogleOAuth = async (): Promise<AuthResponse> => {
-    const { data } = await api.get<AuthResponse>(
-        "/auth/oauth/success"
-    );
+    const { data } = await api.get<AuthResponse>("/auth/oauth/success");
 
     return data;
 };

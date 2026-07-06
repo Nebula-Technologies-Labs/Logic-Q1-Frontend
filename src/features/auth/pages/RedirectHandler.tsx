@@ -1,14 +1,9 @@
-import {
-    useEffect,
-} from "react";
+import { useEffect } from "react";
 
-import {
-    useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-    useAuth,
-} from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
+import Spinner from "@/components/ui/Spinner";
 
 let lastHandledRedirectUrl: string | null = null;
 
@@ -69,15 +64,7 @@ const RedirectHandler = () => {
         };
     }, [login, navigate]);
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-600">
-            <div className="text-center space-y-3">
-                <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
-                <p>Completing sign-in...</p>
-            </div>
-        </div>
-    );
+    return <Spinner message="Completing sign-in..." />;
 };
 
 export default RedirectHandler;
-

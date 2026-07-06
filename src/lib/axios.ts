@@ -1,27 +1,18 @@
-import axios, {
-    AxiosError,
-    AxiosHeaders,
-    type InternalAxiosRequestConfig,
-} from "axios";
+import axios, { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 
-import { storage } from "../utils/storage";
+import { env } from "@/config/env";
+import { storage } from "@/utils/storage";
 
-const PUBLIC_ROUTE_PREFIXES = [
-    "/auth/login",
-    "/auth/register",
-    "/oauth2",
-];
+const PUBLIC_ROUTE_PREFIXES = ["/auth/login", "/auth/register", "/oauth2"];
 
 let unauthorizedBroadcastInFlight = false;
 
-const resolveBaseUrl = (): string =>
-    import.meta.env.VITE_API_URL ??
-    import.meta.env.VITE_API_BASE_URL ??
-    (typeof window !== "undefined" ? window.location.origin : "http://localhost");
+const getBaseUrl = (): string =>
+    env.apiBaseUrl || (typeof window !== "undefined" ? window.location.origin : "http://localhost");
 
 const normalizePath = (url: string): string => {
     try {
-        return new URL(url, resolveBaseUrl()).pathname;
+        return new URL(url, getBaseUrl()).pathname;
     } catch {
         return url.split("?")[0].split("#")[0];
     }
@@ -31,7 +22,7 @@ const isPublicRoute = (url: string): boolean =>
     PUBLIC_ROUTE_PREFIXES.some((prefix) => normalizePath(url).startsWith(prefix));
 
 const api = axios.create({
-    baseURL: resolveBaseUrl(),
+    baseURL: getBaseUrl(),
     withCredentials: true,
     timeout: 10000,
 });
@@ -64,8 +55,7 @@ api.interceptors.response.use(
         }
 
         return Promise.reject(error);
-    }
+    },
 );
 
 export default api;
-

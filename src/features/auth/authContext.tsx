@@ -9,7 +9,8 @@ import {
 } from "react";
 
 import { fetchCurrentUser } from "./api/auth.service";
-import { storage } from "../../utils/storage";
+import { storage } from "@/utils/storage";
+import { isTokenExpired } from "@/utils/auth.utils";
 import type { AuthUser } from "./types/auth.types";
 
 export type AuthContextType = {
@@ -28,10 +29,14 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 let initializationPromise: Promise<{ authenticated: boolean; user: AuthUser | null }> | null = null;
 let initializationResult: { authenticated: boolean; user: AuthUser | null } | null = null;
 
-const validateStoredSession = async (): Promise<{ authenticated: boolean; user: AuthUser | null }> => {
+const validateStoredSession = async (): Promise<{
+    authenticated: boolean;
+    user: AuthUser | null;
+}> => {
     const token = storage.getToken();
 
-    if (!token) {
+    if (!token || isTokenExpired(token)) {
+        storage.clear();
         return { authenticated: false, user: null };
     }
 
@@ -63,11 +68,7 @@ const runInitializeOnce = async (): Promise<{ authenticated: boolean; user: Auth
     return initializationPromise;
 };
 
-export const AuthProvider = ({
-    children,
-}: {
-    children: ReactNode;
-}) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
     const [authenticated, setAuthenticated] = useState(false);
     const [user, setUser] = useState<AuthUser | null>(null);
@@ -121,7 +122,7 @@ export const AuthProvider = ({
 
     const logout = useCallback((): void => {
         storage.clear();
-        initializationResult = null;
+        initializationResult = { authenticated: false, user: null };
 
         if (isMountedRef.current) {
             setAuthenticated(false);
@@ -168,7 +169,7 @@ export const AuthProvider = ({
             logout,
             refreshUser,
         }),
-        [loading, authenticated, user, initialize, login, logout, refreshUser]
+        [loading, authenticated, user, initialize, login, logout, refreshUser],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

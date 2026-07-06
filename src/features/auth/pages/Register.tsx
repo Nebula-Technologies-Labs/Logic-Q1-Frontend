@@ -1,37 +1,17 @@
-import {
-    useState,
-    type ChangeEvent,
-    type FormEvent,
-} from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { isAxiosError } from "axios";
 
-import {
-    FaGoogle,
-} from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
-import {
-    FiEye,
-    FiEyeOff,
-} from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
-import {
-    Link,
-    useNavigate,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import {
-    useAuth,
-} from "../hooks";
+import { useAuth } from "../hooks";
 
-import {
-    register as registerAccount,
-    startGoogleOAuth,
-} from "../api/auth.service";
+import { register as registerAccount, startGoogleOAuth } from "../api/auth.service";
 
-import {
-    validateRegister,
-    type RegistrationForm,
-} from "../../../utils/validators/register.validators";
+import { validateRegister, type RegistrationForm } from "../validators/register.validator";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -60,7 +40,7 @@ const Register = () => {
 
         if (name === "terms") {
             setAgreeTerms(checked);
-            setErrors(previous => {
+            setErrors((previous) => {
                 const next = { ...previous };
                 delete next.terms;
                 return next;
@@ -68,13 +48,13 @@ const Register = () => {
             return;
         }
 
-        setFormData(previous => ({
+        setFormData((previous) => ({
             ...previous,
             [name]: value,
         }));
 
         if (errors[name]) {
-            setErrors(previous => ({
+            setErrors((previous) => ({
                 ...previous,
                 [name]: "",
             }));
@@ -112,7 +92,7 @@ const Register = () => {
             } else if (cause instanceof Error) {
                 message = cause.message;
             }
-            setErrors(previous => ({
+            setErrors((previous) => ({
                 ...previous,
                 form: message,
             }));
@@ -135,11 +115,17 @@ const Register = () => {
             <div className="w-full max-w-[440px] z-10 py-4">
                 <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 sm:p-10 border border-[#C4D5F1] transition-all duration-300">
                     <div className="text-center mb-8">
-                        <img src="/assets/logo.png" alt="LogicQ1" className="h-10 mx-auto mb-5 object-contain" />
+                        <img
+                            src="/assets/logo.png"
+                            alt="LogicQ1"
+                            className="h-10 mx-auto mb-5 object-contain"
+                        />
                         <div className="inline-flex items-center justify-center px-3 py-1 mb-5 text-[11px] font-semibold tracking-widest text-[#334056] uppercase bg-[#F0F5FE] border border-[#C4D5F1] rounded-full">
                             CRM Workspace
                         </div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-[#0D1625] tracking-tight">Create Account</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-[#0D1625] tracking-tight">
+                            Create Account
+                        </h1>
                         <p className="text-[#334056] text-sm mt-2">Start your workspace</p>
                     </div>
 
@@ -172,7 +158,9 @@ const Register = () => {
                                     </label>
                                 </div>
                                 {errors.firstName && (
-                                    <p className="mt-1.5 text-[13px] text-red-500 ml-1">{errors.firstName}</p>
+                                    <p className="mt-1.5 text-[13px] text-red-500 ml-1">
+                                        {errors.firstName}
+                                    </p>
                                 )}
                             </div>
                             <div>
@@ -196,7 +184,9 @@ const Register = () => {
                                     </label>
                                 </div>
                                 {errors.lastName && (
-                                    <p className="mt-1.5 text-[13px] text-red-500 ml-1">{errors.lastName}</p>
+                                    <p className="mt-1.5 text-[13px] text-red-500 ml-1">
+                                        {errors.lastName}
+                                    </p>
                                 )}
                             </div>
                         </div>
@@ -222,7 +212,9 @@ const Register = () => {
                                 </label>
                             </div>
                             {errors.email && (
-                                <p className="mt-1.5 text-[13px] text-red-500 ml-1">{errors.email}</p>
+                                <p className="mt-1.5 text-[13px] text-red-500 ml-1">
+                                    {errors.email}
+                                </p>
                             )}
                         </div>
 
@@ -247,14 +239,20 @@ const Register = () => {
                                 </label>
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword(previous => !previous)}
+                                    onClick={() => setShowPassword((previous) => !previous)}
                                     className="absolute cursor-pointer right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#1E293B] transition-colors focus:outline-none"
                                 >
-                                    {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                                    {showPassword ? (
+                                        <FiEyeOff className="w-4 h-4" />
+                                    ) : (
+                                        <FiEye className="w-4 h-4" />
+                                    )}
                                 </button>
                             </div>
                             {errors.password && (
-                                <p className="mt-1.5 text-[13px] text-red-500 ml-1">{errors.password}</p>
+                                <p className="mt-1.5 text-[13px] text-red-500 ml-1">
+                                    {errors.password}
+                                </p>
                             )}
                         </div>
 
@@ -270,17 +268,33 @@ const Register = () => {
                                         className="w-5 h-5 border-2 border-[#C4D5F1] rounded-[6px] appearance-none checked:bg-[#1E293B] checked:border-[#1E293B] transition-colors cursor-pointer"
                                     />
                                     {agreeTerms && (
-                                        <svg className="absolute w-3 h-3 text-white pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        <svg
+                                            className="absolute w-3 h-3 text-white pointer-events-none"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth={3}
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M5 13l4 4L19 7"
+                                            />
                                         </svg>
                                     )}
                                 </div>
                                 <span className="text-[14px] text-[#334056] leading-snug group-hover:text-[#1E293B] transition-colors">
-                                    I agree to the <span className="font-semibold text-[#1E293B]">Terms</span> & <span className="font-semibold text-[#1E293B]">Privacy Policy</span>
+                                    I agree to the{" "}
+                                    <span className="font-semibold text-[#1E293B]">Terms</span> &{" "}
+                                    <span className="font-semibold text-[#1E293B]">
+                                        Privacy Policy
+                                    </span>
                                 </span>
                             </label>
                             {errors.terms && (
-                                <p className="mt-1.5 text-[13px] text-red-500 ml-1">{errors.terms}</p>
+                                <p className="mt-1.5 text-[13px] text-red-500 ml-1">
+                                    {errors.terms}
+                                </p>
                             )}
                         </div>
 
@@ -291,9 +305,13 @@ const Register = () => {
                                 className="w-full h-[44px] px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-[12px] font-semibold text-[14px] transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(37,99,235,0.2)] active:translate-y-0 active:shadow-none disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 group"
                             >
                                 <span className="flex items-center justify-center gap-2">
-                                    {submitting === "email" ? "Creating account..." : "Create Account"}
+                                    {submitting === "email"
+                                        ? "Creating account..."
+                                        : "Create Account"}
                                     {submitting !== "email" && (
-                                        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                                        <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                            →
+                                        </span>
                                     )}
                                 </span>
                             </button>
@@ -305,7 +323,9 @@ const Register = () => {
                             <div className="w-full border-t border-[#C4D5F1]"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-4 bg-white text-[#334056] text-xs font-medium uppercase tracking-wider">Or</span>
+                            <span className="px-4 bg-white text-[#334056] text-xs font-medium uppercase tracking-wider">
+                                Or
+                            </span>
                         </div>
                     </div>
 
@@ -322,9 +342,14 @@ const Register = () => {
 
                 <div className="mt-8 text-center text-[14px] text-[#334056]">
                     Already have an account?{" "}
-                    <Link to="/login" className="font-semibold text-[#1E293B] hover:text-[#0D1625] transition-colors group inline-flex items-center">
+                    <Link
+                        to="/login"
+                        className="font-semibold text-[#1E293B] hover:text-[#0D1625] transition-colors group inline-flex items-center"
+                    >
                         Sign In
-                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1 ml-1">→</span>
+                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1 ml-1">
+                            →
+                        </span>
                     </Link>
                 </div>
             </div>

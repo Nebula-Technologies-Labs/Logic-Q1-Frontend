@@ -6,8 +6,13 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
-    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-    color: #0D1625;
+    font-family:
+        "Inter",
+        "Segoe UI",
+        system-ui,
+        -apple-system,
+        sans-serif;
+    color: #0d1625;
     position: relative;
     overflow: hidden;
 }
@@ -17,7 +22,7 @@
     position: fixed;
     inset: 0;
     z-index: 0;
-    background: #F0F5FE;
+    background: #f0f5fe;
 }
 
 .onboarding-bg::before {
@@ -45,15 +50,29 @@
 }
 
 @keyframes onb-float-1 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(5%, 8%) scale(1.05); }
-    66% { transform: translate(-3%, -5%) scale(0.95); }
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(5%, 8%) scale(1.05);
+    }
+    66% {
+        transform: translate(-3%, -5%) scale(0.95);
+    }
 }
 
 @keyframes onb-float-2 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(-6%, -4%) scale(1.08); }
-    66% { transform: translate(4%, 6%) scale(0.96); }
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(-6%, -4%) scale(1.08);
+    }
+    66% {
+        transform: translate(4%, 6%) scale(0.96);
+    }
 }
 
 /* ─── Card Container ─── */
@@ -64,8 +83,10 @@
     max-width: 520px;
     background: white;
     border-radius: 20px;
-    border: 1px solid #C4D5F1;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+    border: 1px solid #c4d5f1;
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.04),
+        0 1px 3px rgba(0, 0, 0, 0.02);
     padding: 40px;
     animation: onb-card-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -112,15 +133,15 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #334056;
-    background: #F0F5FE;
-    border: 1px solid #C4D5F1;
+    background: #f0f5fe;
+    border: 1px solid #c4d5f1;
     border-radius: 100px;
 }
 
 .onboarding-title {
     font-size: 24px;
     font-weight: 700;
-    color: #0D1625;
+    color: #0d1625;
     margin: 0 0 8px;
     letter-spacing: -0.02em;
     line-height: 1.3;
@@ -134,7 +155,7 @@
 
 .onboarding-subtitle {
     font-size: 14px;
-    color: #64748B;
+    color: #64748b;
     margin: 0;
     line-height: 1.5;
 }
@@ -152,17 +173,17 @@
     width: 32px;
     height: 4px;
     border-radius: 100px;
-    background: #E2E8F0;
+    background: #e2e8f0;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .onboarding-progress-dot.active {
-    background: #3B82F6;
+    background: #3b82f6;
     width: 48px;
 }
 
 .onboarding-progress-dot.completed {
-    background: #10B981;
+    background: #10b981;
 }
 
 /* ─── Form ─── */
@@ -183,12 +204,14 @@
     height: 48px;
     padding: 18px 14px 6px;
     font-size: 14px;
-    color: #0D1625;
+    color: #0d1625;
     background: transparent;
-    border: 1px solid #C4D5F1;
+    border: 1px solid #c4d5f1;
     border-radius: 12px;
     outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    transition:
+        border-color 0.3s,
+        box-shadow 0.3s;
     box-sizing: border-box;
 }
 
@@ -197,12 +220,12 @@
 }
 
 .onboarding-input:focus {
-    border-color: #1E293B;
+    border-color: #1e293b;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
 }
 
 .onboarding-input.has-error {
-    border-color: #EF4444;
+    border-color: #ef4444;
 }
 
 .onboarding-input.has-error:focus {
@@ -212,10 +235,13 @@
 .onboarding-label {
     position: absolute;
     left: 14px;
-    color: #64748B;
+    color: #64748b;
     font-weight: 400;
     pointer-events: none;
-    transition: top 0.2s, font-size 0.2s, color 0.2s;
+    transition:
+        top 0.2s,
+        font-size 0.2s,
+        color 0.2s;
     top: 16px;
     font-size: 14px;
 }
@@ -228,13 +254,13 @@
 }
 
 .onboarding-input:focus + .onboarding-label {
-    color: #1E293B;
+    color: #1e293b;
 }
 
 /* ─── Field Error ─── */
 .onboarding-field-error {
     font-size: 12px;
-    color: #EF4444;
+    color: #ef4444;
     margin-top: 4px;
     padding-left: 2px;
     animation: onb-error-enter 0.25s ease-out;
@@ -253,9 +279,9 @@
 
 /* ─── API Error Banner ─── */
 .onboarding-error-banner {
-    background: #FEF2F2;
-    border: 1px solid #FECACA;
-    color: #DC2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
     border-radius: 12px;
     padding: 12px 14px;
     font-size: 13px;
@@ -269,7 +295,7 @@
     height: 48px;
     padding: 0 16px;
     margin-top: 4px;
-    background: #2563EB;
+    background: #2563eb;
     color: white;
     border: none;
     border-radius: 12px;
@@ -286,7 +312,7 @@
 }
 
 .onboarding-submit:hover:not(:disabled) {
-    background: #1D4ED8;
+    background: #1d4ed8;
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
 }
@@ -321,7 +347,9 @@
 }
 
 @keyframes onb-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ─── Success State ─── */
@@ -345,7 +373,7 @@
     width: 64px;
     height: 64px;
     margin: 0 auto 20px;
-    background: linear-gradient(135deg, #10B981, #059669);
+    background: linear-gradient(135deg, #10b981, #059669);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -373,13 +401,13 @@
 .onboarding-success-title {
     font-size: 22px;
     font-weight: 700;
-    color: #0D1625;
+    color: #0d1625;
     margin: 0 0 8px;
 }
 
 .onboarding-success-text {
     font-size: 14px;
-    color: #64748B;
+    color: #64748b;
     margin: 0;
     line-height: 1.5;
 }
@@ -403,7 +431,7 @@
 /* ─── Optional helper text ─── */
 .onboarding-helper {
     font-size: 12px;
-    color: #94A3B8;
+    color: #94a3b8;
     margin-top: 2px;
     padding-left: 2px;
 }

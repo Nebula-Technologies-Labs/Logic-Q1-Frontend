@@ -8,23 +8,11 @@ import {
 } from "react";
 import { isAxiosError } from "axios";
 
-import {
-    FiEye,
-    FiEyeOff,
-    FiArrowLeft,
-    FiMail,
-    FiShield,
-    FiLock,
-    FiCheck,
-} from "react-icons/fi";
+import { FiEye, FiEyeOff, FiArrowLeft, FiMail, FiShield, FiLock, FiCheck } from "react-icons/fi";
 
 import { Link, useNavigate } from "react-router-dom";
 
-import {
-    sendPasswordResetOTP,
-    verifyPasswordResetOTP,
-    changePassword,
-} from "../api/auth.service";
+import { sendPasswordResetOTP, verifyPasswordResetOTP, changePassword } from "../api/auth.service";
 
 type Step = "email" | "otp" | "password" | "success";
 
@@ -225,7 +213,12 @@ const ForgotPassword = () => {
 
         setSubmitting(true);
         try {
-            const response = await changePassword(email.trim(), password, repeatPassword, resetToken);
+            const response = await changePassword(
+                email.trim(),
+                password,
+                repeatPassword,
+                resetToken,
+            );
             if (response.status === false) {
                 setError(response.message || "Failed to update password. Please try again.");
                 return;
@@ -240,10 +233,26 @@ const ForgotPassword = () => {
 
     // ── Step Indicator ────────────────────────────────────────────────
     const stepConfig = {
-        email: { number: 1, title: "Reset Password", subtitle: "Enter your email to receive a verification code" },
-        otp: { number: 2, title: "Verify OTP", subtitle: `Enter the ${OTP_LENGTH}-digit code sent to ${email}` },
-        password: { number: 3, title: "New Password", subtitle: "Create a strong password for your account" },
-        success: { number: 3, title: "Password Updated", subtitle: "Your password has been changed successfully" },
+        email: {
+            number: 1,
+            title: "Reset Password",
+            subtitle: "Enter your email to receive a verification code",
+        },
+        otp: {
+            number: 2,
+            title: "Verify OTP",
+            subtitle: `Enter the ${OTP_LENGTH}-digit code sent to ${email}`,
+        },
+        password: {
+            number: 3,
+            title: "New Password",
+            subtitle: "Create a strong password for your account",
+        },
+        success: {
+            number: 3,
+            title: "Password Updated",
+            subtitle: "Your password has been changed successfully",
+        },
     };
 
     const currentStep = stepConfig[step];
@@ -273,11 +282,17 @@ const ForgotPassword = () => {
                 <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 sm:p-10 border border-[#C4D5F1] transition-all duration-300">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <img src="/assets/logo.png" alt="LogicQ1" className="h-10 mx-auto mb-5 object-contain" />
+                        <img
+                            src="/assets/logo.png"
+                            alt="LogicQ1"
+                            className="h-10 mx-auto mb-5 object-contain"
+                        />
                         <div className="inline-flex items-center justify-center px-3 py-1 mb-5 text-[11px] font-semibold tracking-widest text-[#334056] uppercase bg-[#F0F5FE] border border-[#C4D5F1] rounded-full">
                             CRM Workspace
                         </div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-[#0D1625] tracking-tight">{currentStep.title}</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-[#0D1625] tracking-tight">
+                            {currentStep.title}
+                        </h1>
                         <p className="text-[#334056] text-sm mt-2">{currentStep.subtitle}</p>
                     </div>
 
@@ -294,16 +309,22 @@ const ForgotPassword = () => {
                                                 state === "completed"
                                                     ? "bg-green-500 text-white"
                                                     : state === "active"
-                                                    ? "bg-blue-600 text-white shadow-[0_2px_8px_rgba(37,99,235,0.3)]"
-                                                    : "bg-[#F0F5FE] text-[#64748B] border border-[#C4D5F1]"
+                                                      ? "bg-blue-600 text-white shadow-[0_2px_8px_rgba(37,99,235,0.3)]"
+                                                      : "bg-[#F0F5FE] text-[#64748B] border border-[#C4D5F1]"
                                             }`}
                                         >
-                                            {state === "completed" ? <FiCheck className="w-3.5 h-3.5" /> : <Icon className="w-3.5 h-3.5" />}
+                                            {state === "completed" ? (
+                                                <FiCheck className="w-3.5 h-3.5" />
+                                            ) : (
+                                                <Icon className="w-3.5 h-3.5" />
+                                            )}
                                         </div>
                                         {i < stepIcons.length - 1 && (
                                             <div
                                                 className={`w-8 h-[2px] rounded-full transition-all duration-300 ${
-                                                    state === "completed" ? "bg-green-500" : "bg-[#C4D5F1]"
+                                                    state === "completed"
+                                                        ? "bg-green-500"
+                                                        : "bg-[#C4D5F1]"
                                                 }`}
                                             />
                                         )}
@@ -356,7 +377,9 @@ const ForgotPassword = () => {
                                 <span className="flex items-center justify-center gap-2">
                                     {submitting ? "Sending OTP..." : "Send Verification Code"}
                                     {!submitting && (
-                                        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                                        <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                            →
+                                        </span>
                                     )}
                                 </span>
                             </button>
@@ -371,7 +394,9 @@ const ForgotPassword = () => {
                                     {otp.map((digit, index) => (
                                         <input
                                             key={index}
-                                            ref={(el) => { otpRefs.current[index] = el; }}
+                                            ref={(el) => {
+                                                otpRefs.current[index] = el;
+                                            }}
                                             type="text"
                                             inputMode="numeric"
                                             maxLength={1}
@@ -381,7 +406,9 @@ const ForgotPassword = () => {
                                             onPaste={index === 0 ? handleOtpPaste : undefined}
                                             disabled={submitting}
                                             className={`w-11 h-12 text-center text-lg font-semibold text-[#0D1625] border rounded-[12px] transition-all duration-200 focus:outline-none focus:border-[#1E293B] focus:shadow-[0_4px_14px_rgba(0,0,0,0.05)] disabled:opacity-60 ${
-                                                digit ? "border-[#1E293B] bg-[#F0F5FE]/60" : "border-[#C4D5F1] bg-transparent"
+                                                digit
+                                                    ? "border-[#1E293B] bg-[#F0F5FE]/60"
+                                                    : "border-[#C4D5F1] bg-transparent"
                                             }`}
                                         />
                                     ))}
@@ -408,14 +435,20 @@ const ForgotPassword = () => {
                                 <span className="flex items-center justify-center gap-2">
                                     {submitting ? "Verifying..." : "Verify OTP"}
                                     {!submitting && (
-                                        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                                        <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                            →
+                                        </span>
                                     )}
                                 </span>
                             </button>
 
                             <button
                                 type="button"
-                                onClick={() => { setStep("email"); setError(null); setSuccessMessage(null); }}
+                                onClick={() => {
+                                    setStep("email");
+                                    setError(null);
+                                    setSuccessMessage(null);
+                                }}
                                 className="w-full flex items-center justify-center gap-1.5 text-[13px] font-medium text-[#334056] hover:text-[#1E293B] transition-colors"
                             >
                                 <FiArrowLeft className="w-3.5 h-3.5" />
@@ -450,7 +483,11 @@ const ForgotPassword = () => {
                                     onClick={() => setShowPassword((prev) => !prev)}
                                     className="absolute cursor-pointer right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#1E293B] transition-colors focus:outline-none"
                                 >
-                                    {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                                    {showPassword ? (
+                                        <FiEyeOff className="w-4 h-4" />
+                                    ) : (
+                                        <FiEye className="w-4 h-4" />
+                                    )}
                                 </button>
                             </div>
 
@@ -477,7 +514,11 @@ const ForgotPassword = () => {
                                     onClick={() => setShowRepeatPassword((prev) => !prev)}
                                     className="absolute cursor-pointer right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#1E293B] transition-colors focus:outline-none"
                                 >
-                                    {showRepeatPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                                    {showRepeatPassword ? (
+                                        <FiEyeOff className="w-4 h-4" />
+                                    ) : (
+                                        <FiEye className="w-4 h-4" />
+                                    )}
                                 </button>
                             </div>
 
@@ -488,8 +529,14 @@ const ForgotPassword = () => {
                                     { label: "Uppercase", test: /[A-Z]/.test(password) },
                                     { label: "Lowercase", test: /[a-z]/.test(password) },
                                     { label: "Number", test: /[0-9]/.test(password) },
-                                    { label: "Special char", test: /[!@#$%^&*(),.?":{}|<>]/.test(password) },
-                                    { label: "Passwords match", test: password.length > 0 && password === repeatPassword },
+                                    {
+                                        label: "Special char",
+                                        test: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+                                    },
+                                    {
+                                        label: "Passwords match",
+                                        test: password.length > 0 && password === repeatPassword,
+                                    },
                                 ].map((rule) => (
                                     <div
                                         key={rule.label}
@@ -519,7 +566,9 @@ const ForgotPassword = () => {
                                 <span className="flex items-center justify-center gap-2">
                                     {submitting ? "Updating Password..." : "Update Password"}
                                     {!submitting && (
-                                        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                                        <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                            →
+                                        </span>
                                     )}
                                 </span>
                             </button>
@@ -533,7 +582,8 @@ const ForgotPassword = () => {
                                 <FiCheck className="w-7 h-7 text-green-500" />
                             </div>
                             <p className="text-[#334056] text-sm">
-                                Your password has been updated. You can now sign in with your new credentials.
+                                Your password has been updated. You can now sign in with your new
+                                credentials.
                             </p>
                             <button
                                 type="button"
@@ -542,7 +592,9 @@ const ForgotPassword = () => {
                             >
                                 <span className="flex items-center justify-center gap-2">
                                     Go to Sign In
-                                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                        →
+                                    </span>
                                 </span>
                             </button>
                         </div>
@@ -552,9 +604,14 @@ const ForgotPassword = () => {
                 {/* Footer link */}
                 <div className="mt-8 text-center text-[14px] text-[#334056]">
                     Remember your password?{" "}
-                    <Link to="/login" className="font-semibold text-[#1E293B] hover:text-[#0D1625] transition-colors group inline-flex items-center">
+                    <Link
+                        to="/login"
+                        className="font-semibold text-[#1E293B] hover:text-[#0D1625] transition-colors group inline-flex items-center"
+                    >
                         Sign In
-                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1 ml-1">→</span>
+                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1 ml-1">
+                            →
+                        </span>
                     </Link>
                 </div>
             </div>
