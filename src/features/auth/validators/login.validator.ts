@@ -1,7 +1,4 @@
-export const validateLogin = (
-    email: string,
-    password: string,
-): Record<string, string> => {
+export const validateLogin = (email: string, password: string): Record<string, string> => {
     const errors: Record<string, string> = {};
 
     if (!email.trim()) {

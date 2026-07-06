@@ -1,0 +1,437 @@
+/* ─── Onboarding Page Styles ─── */
+
+.onboarding-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family:
+        "Inter",
+        "Segoe UI",
+        system-ui,
+        -apple-system,
+        sans-serif;
+    color: #0d1625;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ─── Animated Background ─── */
+.onboarding-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: #f0f5fe;
+}
+
+.onboarding-bg::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    left: -20%;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
+    animation: onb-float-1 20s ease-in-out infinite;
+}
+
+.onboarding-bg::after {
+    content: "";
+    position: absolute;
+    bottom: -30%;
+    right: -15%;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+    animation: onb-float-2 25s ease-in-out infinite;
+}
+
+@keyframes onb-float-1 {
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(5%, 8%) scale(1.05);
+    }
+    66% {
+        transform: translate(-3%, -5%) scale(0.95);
+    }
+}
+
+@keyframes onb-float-2 {
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(-6%, -4%) scale(1.08);
+    }
+    66% {
+        transform: translate(4%, 6%) scale(0.96);
+    }
+}
+
+/* ─── Card Container ─── */
+.onboarding-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #c4d5f1;
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.04),
+        0 1px 3px rgba(0, 0, 0, 0.02);
+    padding: 40px;
+    animation: onb-card-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes onb-card-enter {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 640px) {
+    .onboarding-card {
+        padding: 28px 20px;
+        border-radius: 16px;
+    }
+}
+
+/* ─── Header ─── */
+.onboarding-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.onboarding-logo {
+    height: 40px;
+    margin: 0 auto 20px;
+    display: block;
+    object-fit: contain;
+}
+
+.onboarding-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 14px;
+    margin-bottom: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #334056;
+    background: #f0f5fe;
+    border: 1px solid #c4d5f1;
+    border-radius: 100px;
+}
+
+.onboarding-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0d1625;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+}
+
+@media (min-width: 640px) {
+    .onboarding-title {
+        font-size: 28px;
+    }
+}
+
+.onboarding-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ─── Progress Steps ─── */
+.onboarding-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.onboarding-progress-dot {
+    width: 32px;
+    height: 4px;
+    border-radius: 100px;
+    background: #e2e8f0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.onboarding-progress-dot.active {
+    background: #3b82f6;
+    width: 48px;
+}
+
+.onboarding-progress-dot.completed {
+    background: #10b981;
+}
+
+/* ─── Form ─── */
+.onboarding-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ─── Field Group (floating label) ─── */
+.onboarding-field {
+    position: relative;
+}
+
+.onboarding-input {
+    display: block;
+    width: 100%;
+    height: 48px;
+    padding: 18px 14px 6px;
+    font-size: 14px;
+    color: #0d1625;
+    background: transparent;
+    border: 1px solid #c4d5f1;
+    border-radius: 12px;
+    outline: none;
+    transition:
+        border-color 0.3s,
+        box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+.onboarding-input::placeholder {
+    color: transparent;
+}
+
+.onboarding-input:focus {
+    border-color: #1e293b;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.onboarding-input.has-error {
+    border-color: #ef4444;
+}
+
+.onboarding-input.has-error:focus {
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.08);
+}
+
+.onboarding-label {
+    position: absolute;
+    left: 14px;
+    color: #64748b;
+    font-weight: 400;
+    pointer-events: none;
+    transition:
+        top 0.2s,
+        font-size 0.2s,
+        color 0.2s;
+    top: 16px;
+    font-size: 14px;
+}
+
+/* Float up when input is focused or has value */
+.onboarding-input:focus + .onboarding-label,
+.onboarding-input:not(:placeholder-shown) + .onboarding-label {
+    top: 5px;
+    font-size: 11px;
+}
+
+.onboarding-input:focus + .onboarding-label {
+    color: #1e293b;
+}
+
+/* ─── Field Error ─── */
+.onboarding-field-error {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: 4px;
+    padding-left: 2px;
+    animation: onb-error-enter 0.25s ease-out;
+}
+
+@keyframes onb-error-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ─── API Error Banner ─── */
+.onboarding-error-banner {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    animation: onb-error-enter 0.3s ease-out;
+}
+
+/* ─── Submit Button ─── */
+.onboarding-submit {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    margin-top: 4px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.onboarding-submit:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+}
+
+.onboarding-submit:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.onboarding-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.onboarding-submit .arrow {
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.onboarding-submit:hover:not(:disabled) .arrow {
+    transform: translateX(4px);
+}
+
+/* ─── Spinner ─── */
+.onboarding-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: onb-spin 0.6s linear infinite;
+}
+
+@keyframes onb-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── Success State ─── */
+.onboarding-success {
+    text-align: center;
+    animation: onb-success-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes onb-success-enter {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.onboarding-success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: onb-icon-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+@keyframes onb-icon-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.5) rotate(-10deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.onboarding-success-icon svg {
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.onboarding-success-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0d1625;
+    margin: 0 0 8px;
+}
+
+.onboarding-success-text {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ─── Step transition ─── */
+.onboarding-step-enter {
+    animation: onb-step-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes onb-step-in {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ─── Optional helper text ─── */
+.onboarding-helper {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+    padding-left: 2px;
+}

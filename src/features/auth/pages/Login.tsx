@@ -1,22 +1,11 @@
-import {
-    useState,
-    type FormEvent,
-} from "react";
+import { useState, type FormEvent } from "react";
+import { isAxiosError } from "axios";
 
-import {
-    FaGoogle,
-} from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
-import {
-    FiLock,
-    FiMail,
-} from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
-import {
-    Link,
-    useLocation,
-    useNavigate,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks";
 import { emailLogin, startGoogleOAuth } from "../api";
@@ -36,6 +25,7 @@ const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [submitting, setSubmitting] = useState<"email" | "google" | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -57,9 +47,12 @@ const Login = () => {
             await login(token);
             return true;
         } catch (cause) {
-            const message = cause instanceof Error
-                ? cause.message
-                : "Sign in failed. Please check your credentials and try again.";
+            let message = "Sign in failed. Please check your credentials and try again.";
+            if (isAxiosError(cause) && cause.response?.data?.message) {
+                message = cause.response.data.message;
+            } else if (cause instanceof Error) {
+                message = cause.message;
+            }
             setErrors({ form: message });
             return false;
         } finally {
@@ -88,100 +81,158 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center px-4">
-            <div className="w-full max-w-md">
-                <div className="bg-white shadow-2xl rounded-3xl p-10 border border-gray-100">
-                    <div className="text-center mb-10">
-                        <img src="/assets/logo.png" alt="LogicQ1" className="h-20 mx-auto mb-5" />
-                        <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-                        <p className="text-gray-500 mt-2">Sign in to continue to your workspace</p>
+        <div className="min-h-screen bg-[#F0F5FE] relative overflow-hidden flex items-center justify-center px-4 sm:px-6 lg:px-8 font-sans text-[#0D1625]">
+            {/* Background effects */}
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/60 via-[#F0F5FE] to-[#F0F5FE]"></div>
+            <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-white/50 to-transparent z-0 pointer-events-none"></div>
+
+            <div className="w-full max-w-[440px] z-10">
+                <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 sm:p-10 border border-[#C4D5F1] transition-all duration-300">
+                    <div className="text-center mb-8">
+                        <img
+                            src="/assets/logo.png"
+                            alt="LogicQ1"
+                            className="h-10 mx-auto mb-5 object-contain"
+                        />
+                        <div className="inline-flex items-center justify-center px-3 py-1 mb-5 text-[11px] font-semibold tracking-widest text-[#334056] uppercase bg-[#F0F5FE] border border-[#C4D5F1] rounded-full">
+                            CRM Workspace
+                        </div>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-[#0D1625] tracking-tight">
+                            Welcome Back
+                        </h1>
+                        <p className="text-[#334056] text-sm mt-2">
+                            Sign in to continue to your workspace
+                        </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-700">Email</label>
-                            <div className="relative">
-                                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
-                                <input
-                                    id="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    placeholder="name@example.com"
-                                    value={email}
-                                    onChange={(event) => {
-                                        setEmail(event.target.value);
-                                        if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
-                                    }}
-                                    disabled={submitting !== null}
-                                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all"
-                                />
-                            </div>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="relative group">
+                            <input
+                                id="email"
+                                type="email"
+                                autoComplete="email"
+                                value={email}
+                                onChange={(event) => {
+                                    setEmail(event.target.value);
+                                    if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                                }}
+                                disabled={submitting !== null}
+                                className="block w-full h-[44px] px-3.5 pt-4 pb-1 text-[14px] text-[#0D1625] bg-transparent border border-[#C4D5F1] rounded-[12px] appearance-none focus:outline-none focus:border-[#1E293B] focus:shadow-[0_4px_14px_rgba(0,0,0,0.05)] peer transition-all duration-300"
+                                placeholder=" "
+                                required
+                            />
+                            <label
+                                htmlFor="email"
+                                className="absolute left-3.5 text-[#64748B] font-normal transition-[top,color] duration-200 pointer-events-none top-1 text-[11px] peer-placeholder-shown:top-[14px] peer-placeholder-shown:text-[14px] peer-focus:top-1 peer-focus:text-[11px] peer-focus:text-[#1E293B]"
+                            >
+                                Email
+                            </label>
                             {errors.email && (
                                 <p className="mt-1 text-xs text-red-600">{errors.email}</p>
                             )}
                         </div>
 
-                        <div>
-                            <div className="flex justify-between items-center mb-2">
-                                <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
-                            </div>
-                            <div className="relative">
-                                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
-                                <input
-                                    id="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={(event) => {
-                                        setPassword(event.target.value);
-                                        if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
-                                    }}
-                                    disabled={submitting !== null}
-                                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all"
-                                />
-                            </div>
+                        <div className="relative group">
+                            <input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                autoComplete="current-password"
+                                value={password}
+                                onChange={(event) => {
+                                    setPassword(event.target.value);
+                                    if (errors.password)
+                                        setErrors((prev) => ({ ...prev, password: "" }));
+                                }}
+                                disabled={submitting !== null}
+                                className="block w-full h-[44px] pl-3.5 pr-10 pt-4 pb-1 text-[14px] text-[#0D1625] bg-transparent border border-[#C4D5F1] rounded-[12px] appearance-none focus:outline-none focus:border-[#1E293B] focus:shadow-[0_4px_14px_rgba(0,0,0,0.05)] peer transition-all duration-300"
+                                placeholder=" "
+                                required
+                            />
+                            <label
+                                htmlFor="password"
+                                className="absolute left-3.5 text-[#64748B] font-normal transition-[top,color] duration-200 pointer-events-none top-1 text-[11px] peer-placeholder-shown:top-[14px] peer-placeholder-shown:text-[14px] peer-focus:top-1 peer-focus:text-[11px] peer-focus:text-[#1E293B]"
+                            >
+                                Password
+                            </label>
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute cursor-pointer right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#1E293B] transition-colors focus:outline-none"
+                            >
+                                {showPassword ? (
+                                    <FiEyeOff className="w-4 h-4" />
+                                ) : (
+                                    <FiEye className="w-4 h-4" />
+                                )}
+                            </button>
                             {errors.password && (
                                 <p className="mt-1 text-xs text-red-600">{errors.password}</p>
                             )}
                         </div>
 
                         {errors.form && (
-                            <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 text-sm">
+                            <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 text-sm transition-all duration-300">
                                 {errors.form}
                             </div>
                         )}
 
+                        <div className="flex justify-end pt-1 pb-2">
+                            <Link
+                                to="/forgot-password"
+                                className="text-sm font-medium text-[#334056] hover:text-[#1E293B] transition-colors duration-200"
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
+
                         <button
                             type="submit"
                             disabled={submitting !== null}
-                            className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full h-[44px] px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-[12px] font-semibold text-[14px] transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(37,99,235,0.2)] active:translate-y-0 active:shadow-none disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 group"
                         >
-                            {submitting === "email" ? "Signing in..." : "Sign In"}
+                            <span className="flex items-center justify-center gap-2">
+                                {submitting === "email" ? "Signing in..." : "Sign In"}
+                                {submitting !== "email" && (
+                                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                        →
+                                    </span>
+                                )}
+                            </span>
                         </button>
                     </form>
 
-                    <div className="flex items-center my-8">
-                        <div className="flex-1 border-t border-gray-200" />
-                        <span className="px-4 text-sm text-gray-400">OR</span>
-                        <div className="flex-1 border-t border-gray-200" />
+                    <div className="relative my-7">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-[#C4D5F1]"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-4 bg-white text-[#334056] text-xs font-medium uppercase tracking-wider">
+                                Or
+                            </span>
+                        </div>
                     </div>
 
                     <button
                         type="button"
                         onClick={handleGoogleLogin}
                         disabled={submitting !== null}
-                        className="w-full py-3 border border-gray-300 rounded-xl flex items-center justify-center gap-3 font-medium hover:bg-gray-50 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full h-[44px] px-4 bg-white border border-[#C4D5F1] shadow-[0_2px_8px_rgb(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgb(0,0,0,0.06)] hover:border-[#1E293B] hover:bg-[#F0F5FE]/50 text-[#0D1625] rounded-[12px] font-medium text-[14px] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
                     >
-                        <FaGoogle className="text-lg" />
+                        <FaGoogle className="text-lg text-[#334056] group-hover:text-[#0D1625] transition-colors" />
                         {submitting === "google" ? "Redirecting..." : "Continue with Google"}
                     </button>
                 </div>
 
-                <div className="mt-8 text-center text-gray-600">
-                    Don't have an account?
-                    <Link to="/register" className="ml-2 font-semibold text-blue-600 hover:text-blue-700">
+                <div className="mt-8 text-center text-[14px] text-[#334056]">
+                    Don't have an account?{" "}
+                    <Link
+                        to="/register"
+                        className="font-semibold text-[#1E293B] hover:text-[#0D1625] transition-colors group inline-flex items-center"
+                    >
                         Create Account
+                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1 ml-1">
+                            →
+                        </span>
                     </Link>
                 </div>
             </div>
@@ -190,4 +241,3 @@ const Login = () => {
 };
 
 export default Login;
-

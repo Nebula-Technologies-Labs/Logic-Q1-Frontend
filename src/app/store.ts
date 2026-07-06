@@ -1,6 +1,4 @@
-import {
-    configureStore,
-} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
     reducer: {},
@@ -11,4 +9,3 @@ export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
 
 export default store;
-

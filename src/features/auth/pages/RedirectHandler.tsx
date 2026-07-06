@@ -1,10 +1,6 @@
-import {
-    useEffect,
-} from "react";
+import { useEffect } from "react";
 
-import {
-    useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../hooks/useAuth";
 import Spinner from "@/components/ui/Spinner";
@@ -72,4 +68,3 @@ const RedirectHandler = () => {
 };
 
 export default RedirectHandler;
-
