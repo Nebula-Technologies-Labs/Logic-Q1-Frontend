@@ -1,37 +1,46 @@
-import {
-    useState,
-} from "react";
-
-import {
-    useAuth,
-} from "../../auth/hooks/useAuth";
+import { LayoutDashboard } from "lucide-react";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 const Dashboard = () => {
-    const { logout } = useAuth();
-    const [submitting, setSubmitting] = useState(false);
-
-    const handleLogout = () => {
-        setSubmitting(true);
-        logout();
-    };
+    const { user } = useAuth();
+    const greeting = user?.firstName ? `Welcome back, ${user.firstName}` : "Welcome back";
 
     return (
-        <div className="min-h-screen bg-slate-50 p-6 text-slate-900">
-            <div className="mx-auto max-w-5xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-                <div className="flex items-center justify-between gap-4">
-                    <div>
-                        <h1 className="text-2xl font-bold">Logiq1 Dashboard</h1>
-                        <p className="mt-1 text-sm text-slate-500">You are signed in through the centralized auth context.</p>
-                    </div>
+        <div className="stub-page">
+            <div className="stub-header">
+                <h1 className="stub-title">{greeting}</h1>
+                <p className="stub-desc">Here is what's happening with your workspace today.</p>
+            </div>
 
-                    <button
-                        type="button"
-                        onClick={handleLogout}
-                        disabled={submitting}
-                        className="rounded-xl bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        {submitting ? "Signing out..." : "Logout"}
-                    </button>
+            <div className="stub-stats">
+                <div className="stub-stat-card">
+                    <div className="stub-stat-label">Total Contacts</div>
+                    <div className="stub-stat-value">0</div>
+                    <div className="stub-stat-sub">Manage your network</div>
+                </div>
+                <div className="stub-stat-card">
+                    <div className="stub-stat-label">Active Deals</div>
+                    <div className="stub-stat-value">0</div>
+                    <div className="stub-stat-sub">Track your pipeline</div>
+                </div>
+                <div className="stub-stat-card">
+                    <div className="stub-stat-label">Tasks Due</div>
+                    <div className="stub-stat-value">0</div>
+                    <div className="stub-stat-sub">Stay on top of your work</div>
+                </div>
+            </div>
+
+            <div className="stub-placeholder">
+                <div className="stub-icon-wrapper">
+                    <LayoutDashboard size={22} color="#2563EB" strokeWidth={1.8} />
+                </div>
+                <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: "#0D1625" }}>
+                        Dashboard coming soon
+                    </div>
+                    <div style={{ fontSize: 13, color: "#8899B0", marginTop: 4 }}>
+                        This section is under construction.
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,4 +48,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
