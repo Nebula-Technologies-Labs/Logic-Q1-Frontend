@@ -10,6 +10,7 @@ import Login from "../features/auth/pages/Login";
 import Register from "../features/auth/pages/Register";
 import ForgotPassword from "../features/auth/pages/ForgotPassword";
 import OAuthRedirect from "../features/auth/pages/OAuthRedirect.tsx";
+import Onboarding from "../features/onboarding/pages/Onboarding";
 
 
 const AppRoutes = () => (
@@ -20,6 +21,14 @@ const AppRoutes = () => (
         <Route
             path="/oauth2/redirect"
             element={<OAuthRedirect />}
+        />
+        <Route
+            path="/onboarding"
+            element={
+                <ProtectedRoute>
+                    <Onboarding />
+                </ProtectedRoute>
+            }
         />
         <Route
             path="/dashboard"
@@ -35,4 +44,3 @@ const AppRoutes = () => (
 );
 
 export default AppRoutes;
-

@@ -19,6 +19,7 @@ const RequireAuth = ({
     const {
         loading,
         authenticated,
+        user,
     } = useAuth();
 
     const location = useLocation();
@@ -44,8 +45,12 @@ const RequireAuth = ({
         );
     }
 
+    // Redirect to onboarding if org hasn't been created yet
+    if (user && !user.orgId && location.pathname !== "/onboarding") {
+        return <Navigate to="/onboarding" replace />;
+    }
+
     return <>{children}</>;
 };
 
 export default RequireAuth;
-

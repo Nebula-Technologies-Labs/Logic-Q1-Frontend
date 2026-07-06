@@ -5,7 +5,6 @@ import type {
     LoginRequest,
     AuthResponse,
     RegisterRequest,
-    AuthUser,
 } from "../types/auth.types";
 
 const GOOGLE_OAUTH_FALLBACK_PATH = "/oauth2/authorization/google";
@@ -32,8 +31,8 @@ export const register = async (
     return data;
 };
 
-export const fetchCurrentUser = async (): Promise<AuthUser> => {
-    const { data } = await api.get<AuthUser>("/auth/me");
+export const fetchCurrentUser = async (): Promise<AuthResponse> => {
+    const { data } = await api.get<AuthResponse>("/auth/me");
     return data;
 };
 
