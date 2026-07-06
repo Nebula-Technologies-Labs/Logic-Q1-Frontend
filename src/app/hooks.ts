@@ -10,7 +10,7 @@ import type {
 import type {
 	AppDispatch,
 	RootState,
-} from "./Store.tsx";
+} from "./store";
 
 export const useAppDispatch = () =>
 	useDispatch<AppDispatch>();
