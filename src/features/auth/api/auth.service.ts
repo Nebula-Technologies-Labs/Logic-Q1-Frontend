@@ -37,6 +37,45 @@ export const fetchCurrentUser = async (): Promise<AuthUser> => {
     return data;
 };
 
+export interface ForgotPasswordResponse {
+    status: boolean;
+    message: string;
+    token?: string;
+}
+
+export const sendPasswordResetOTP = async (
+    email: string,
+): Promise<ForgotPasswordResponse> => {
+    const { data } = await api.post<ForgotPasswordResponse>(
+        `/auth/forgotPassword/verifyMail/${encodeURIComponent(email)}`,
+    );
+    return data;
+};
+
+export const verifyPasswordResetOTP = async (
+    email: string,
+    otp: string,
+): Promise<ForgotPasswordResponse> => {
+    const { data } = await api.post<ForgotPasswordResponse>(
+        `/auth/forgotPassword/verifyOTP/${encodeURIComponent(email)}/${encodeURIComponent(otp)}`,
+    );
+    return data;
+};
+
+export const changePassword = async (
+    email: string,
+    password: string,
+    repeatPassword: string,
+    token: string,
+): Promise<ForgotPasswordResponse> => {
+    const { data } = await api.post<ForgotPasswordResponse>(
+        `/auth/forgotPassword/changePassword/${encodeURIComponent(email)}`,
+        { password, repeatPassword },
+        { headers: { Authorization: `Bearer ${token}` } },
+    );
+    return data;
+};
+
 export const resolveGoogleLoginUrl = (): string => {
     const configuredUrl = env.googleLoginUrl?.trim();
 
