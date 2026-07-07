@@ -1,26 +1,14 @@
-import {
-    type ReactNode,
-} from "react";
+import { type ReactNode } from "react";
 
-import {
-    Provider,
-} from "react-redux";
+import { Provider } from "react-redux";
 
-import {
-    BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
-import {
-    AuthProvider,
-} from "../features/auth/authContext";
+import { AuthProvider } from "../features/auth/authContext";
 
 import store from "./store";
 
-const AppProviders = ({
-    children,
-}: {
-    children: ReactNode;
-}) => (
+const AppProviders = ({ children }: { children: ReactNode }) => (
     <BrowserRouter>
         <Provider store={store}>
             <AuthProvider>{children}</AuthProvider>

@@ -1,17 +1,9 @@
-import axios, {
-    AxiosError,
-    AxiosHeaders,
-    type InternalAxiosRequestConfig,
-} from "axios";
+import axios, { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 
 import { env } from "@/config/env";
 import { storage } from "@/utils/storage";
 
-const PUBLIC_ROUTE_PREFIXES = [
-    "/auth/login",
-    "/auth/register",
-    "/oauth2",
-];
+const PUBLIC_ROUTE_PREFIXES = ["/auth/login", "/auth/register", "/oauth2"];
 
 let unauthorizedBroadcastInFlight = false;
 
@@ -63,8 +55,7 @@ api.interceptors.response.use(
         }
 
         return Promise.reject(error);
-    }
+    },
 );
 
 export default api;
-

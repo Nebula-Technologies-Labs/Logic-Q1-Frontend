@@ -20,6 +20,7 @@ export type AuthContextType = {
     initialize: () => Promise<void>;
     login: (token: string) => Promise<void>;
     logout: () => void;
+    refreshUser: () => Promise<void>;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -28,7 +29,10 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 let initializationPromise: Promise<{ authenticated: boolean; user: AuthUser | null }> | null = null;
 let initializationResult: { authenticated: boolean; user: AuthUser | null } | null = null;
 
-const validateStoredSession = async (): Promise<{ authenticated: boolean; user: AuthUser | null }> => {
+const validateStoredSession = async (): Promise<{
+    authenticated: boolean;
+    user: AuthUser | null;
+}> => {
     const token = storage.getToken();
 
     if (!token || isTokenExpired(token)) {
@@ -37,8 +41,8 @@ const validateStoredSession = async (): Promise<{ authenticated: boolean; user: 
     }
 
     try {
-        const user = await fetchCurrentUser();
-        return { authenticated: true, user };
+        const response = await fetchCurrentUser();
+        return { authenticated: true, user: response.user };
     } catch {
         storage.clear();
         return { authenticated: false, user: null };
@@ -64,11 +68,7 @@ const runInitializeOnce = async (): Promise<{ authenticated: boolean; user: Auth
     return initializationPromise;
 };
 
-export const AuthProvider = ({
-    children,
-}: {
-    children: ReactNode;
-}) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
     const [authenticated, setAuthenticated] = useState(false);
     const [user, setUser] = useState<AuthUser | null>(null);
@@ -101,12 +101,12 @@ export const AuthProvider = ({
         storage.setToken(token);
 
         try {
-            const fetchedUser = await fetchCurrentUser();
-            initializationResult = { authenticated: true, user: fetchedUser };
+            const response = await fetchCurrentUser();
+            initializationResult = { authenticated: true, user: response.user };
 
             if (isMountedRef.current) {
-                setUser(fetchedUser);
                 setAuthenticated(true);
+                setUser(response.user);
                 setLoading(false);
             }
         } catch {
@@ -114,6 +114,7 @@ export const AuthProvider = ({
 
             if (isMountedRef.current) {
                 setAuthenticated(true);
+                setUser(null);
                 setLoading(false);
             }
         }
@@ -127,6 +128,19 @@ export const AuthProvider = ({
             setAuthenticated(false);
             setUser(null);
             setLoading(false);
+        }
+    }, []);
+
+    const refreshUser = useCallback(async (): Promise<void> => {
+        try {
+            const response = await fetchCurrentUser();
+            initializationResult = { authenticated: true, user: response.user };
+
+            if (isMountedRef.current) {
+                setUser(response.user);
+            }
+        } catch {
+            // If refresh fails, don't change auth state — just leave user as-is
         }
     }, []);
 
@@ -153,11 +167,10 @@ export const AuthProvider = ({
             initialize,
             login,
             logout,
+            refreshUser,
         }),
-        [loading, authenticated, user, initialize, login, logout]
+        [loading, authenticated, user, initialize, login, logout, refreshUser],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-
